@@ -1,10 +1,10 @@
 #%%
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Circle
 import statistics as st
 import csv
+from matplotlib.widgets import Slider
+from matplotlib.widgets import Button
 
 def printcsv():
     x = []
@@ -17,7 +17,6 @@ def printcsv():
             x.append(row[0])
             y.append(row[1])
             z.append(row[2])
-            #print(f'x: {row[0]}, y: {row[1]}, z: {row[2]}')
             line_count += 1
         x = list(map(float, x))
         y = list(map(float, y))
@@ -29,6 +28,12 @@ def map_range(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 
+def reset(event):
+    radius_slider.reset()
+    height_slider.reset()
+    xcenter_slider.reset()
+    ycenter_slider.reset()
+
 class Cylinder:
     def __init__(self, radius = 1, height = 2, x_center = 0, y_center = 0, elevation = 0, color = 'b'):
         self.radius = radius
@@ -38,17 +43,29 @@ class Cylinder:
         self.y_center = y_center
         self.resolution = 100
         self.elevation = elevation
+        
+        #Create the cylinder
+        self.z = np.linspace(self.elevation, self.elevation + self.height, self.resolution)    #Create a figure with x height around z-axis
+        self.theta = np.linspace(0, 2*np.pi, self.resolution)    #Create a theta value to mesh with 
+        self.theta_grid, self.z_grid = np.meshgrid(self.theta, self.z)
+        self.x_grid = self.radius * np.cos(self.theta_grid) + self.x_center
+        self.y_grid = self.radius * np.sin(self.theta_grid) + self.y_center
+        self.surf = ax.plot_surface(self.x_grid, self.y_grid, self.z_grid, linewidth=0, color=self.color)
+
     
-    def print_fig(self):
-        #simpler implementation
-        z = np.linspace(self.elevation, self.elevation + self.height, self.resolution)    #Create a figure with x height around z-axis
-        theta = np.linspace(0, 2*np.pi, self.resolution)    #Create a theta value to mesh with 
+    def update(self, val):
+        #Update the cylinder from slider values.
+        z = np.linspace(self.elevation, self.elevation + height_slider.val, self.resolution)
+        theta = np.linspace(0, 2*np.pi, self.resolution)
         theta_grid, z_grid = np.meshgrid(theta, z)
-        x_grid = self.radius * np.cos(theta_grid) + self.x_center
-        y_grid = self.radius * np.sin(theta_grid) + self.y_center
-        ax.plot_surface(x_grid, y_grid, z_grid, linewidth=0)
+        x_grid = radius_slider.val * np.cos(theta_grid) + xcenter_slider.val
+        y_grid = radius_slider.val * np.sin(theta_grid) + ycenter_slider.val
+        self.surf.remove()
+        self.surf = ax.plot_surface(x_grid, y_grid, z_grid, linewidth=0, color=self.color)
+        fig.canvas.draw_idle()
     
-    
+        
+        
 class Drone(Cylinder):
     def __init__(self, cylinder):
         self.radius = cylinder.radius
@@ -85,33 +102,55 @@ class Drone(Cylinder):
         
 
 #Create 3D figure
-fig=plt.figure()
-ax = Axes3D(fig)
-
-#Create cylinder object with radius 3, height 20, x center value of 4, y center value of 0, elevation of 15 and color 'blue'
-radius = 3
-height = 20
-x_center = 4
-y_center = 0
-elevation = 15
-color = 'b'
-cylinder1 = Cylinder(radius, height, x_center, y_center, elevation, color)
-
-#Create drone object which inherits the beforementioned cylinder object values.
-drone1 = Drone(cylinder1)
-
-#Print the cylinder object
-cylinder1.print_fig()
-
-#Set x,y,z values from .csv file
-x, y, z =printcsv()
-ax.scatter(x,y,z)
-ax.plot(x, y, z)
+fig = plt.figure()
+ax = plt.axes(projection = '3d')
 
 #Set axis labels
 ax.set_xlabel('x-axis')
 ax.set_ylabel('y-axis')
 ax.set_zlabel('z-axis')
+
+#Create cylinder object with radius 3, height 20, x center value of 4, y center value of 0, elevation of 15 and color 'blue'
+""" radius = 3
+height = 20
+x_center = 4
+y_center = 0
+elevation = 15
+color = 'b'
+cylinder1 = Cylinder(radius, height, x_center, y_center, elevation, color) """
+cylinder1 = Cylinder()
+
+#Create drone object which inherits the beforementioned cylinder object values.
+drone1 = Drone(cylinder1)
+
+#Set x,y,z values from .csv file
+x, y, z =printcsv()
+ax.scatter(x,y,z)
+l1, = ax.plot(x, y, z)
+
+#Create sliders to set cylinder values
+ax_radius = fig.add_axes([0.2, 0.25, 0.0225, 0.63])
+ax_height = fig.add_axes([0.15, 0.25, 0.0225, 0.63])
+ax_xcenter = fig.add_axes([0.1, 0.25, 0.0225, 0.63])
+ax_ycenter = fig.add_axes([0.05, 0.25, 0.0225, 0.63])
+radius_slider = Slider(ax=ax_radius, label='Radius [m]', valmin=1, valmax=30, valinit=1, valstep=1, orientation='vertical')
+height_slider = Slider(ax=ax_height, label='Height [m]', valmin=1, valmax=30, valinit=1, valstep=1, orientation='vertical')
+xcenter_slider = Slider(ax=ax_xcenter, label='x-offset [m]', valmin=0, valmax=30, valinit=0, valstep=1, orientation='vertical')
+ycenter_slider = Slider(ax=ax_ycenter, label='y-offset [m]', valmin=0, valmax=30, valinit=0, valstep=1, orientation='vertical')
+
+#Update the cylinder values from sliders
+radius_slider.on_changed(cylinder1.update)
+height_slider.on_changed(cylinder1.update)
+xcenter_slider.on_changed(cylinder1.update)
+ycenter_slider.on_changed(cylinder1.update)
+
+# Create a button to reset the sliders to initial values.
+resetax = fig.add_axes([0.8, 0.025, 0.1, 0.04])
+button = Button(resetax, 'Reset', hovercolor='0.975')
+
+#Reset the slider values
+button.on_clicked(reset)
+
 plt.show()
 
 # %%

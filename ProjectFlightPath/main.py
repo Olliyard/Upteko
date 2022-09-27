@@ -1,4 +1,5 @@
 #%%
+from locale import normalize
 import matplotlib.pyplot as plt
 import numpy as np
 import statistics as st
@@ -27,13 +28,17 @@ def printcsv():
 def map_range(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
-
+#Used for resetting values
 def reset(event):
     radius_slider.reset()
     height_slider.reset()
     xcenter_slider.reset()
     ycenter_slider.reset()
+    ax.axes.set_xlim3d(left=-5, right=10) 
+    ax.axes.set_ylim3d(bottom=-5, top=10) 
+    ax.axes.set_zlim3d(bottom=0, top=50) 
 
+#Used for creating and updating cylinder
 class Cylinder:
     def __init__(self, radius = 1, height = 2, x_center = 0, y_center = 0, elevation = 0, color = 'b'):
         self.radius = radius
@@ -41,7 +46,7 @@ class Cylinder:
         self.color = color
         self.x_center = x_center
         self.y_center = y_center
-        self.resolution = 100
+        self.resolution = 20
         self.elevation = elevation
         
         #Create the cylinder
@@ -65,7 +70,7 @@ class Cylinder:
         fig.canvas.draw_idle()
     
         
-        
+#Used for mapping to cylinder
 class Drone(Cylinder):
     def __init__(self, cylinder):
         self.radius = cylinder.radius
@@ -111,22 +116,21 @@ ax.set_ylabel('y-axis')
 ax.set_zlabel('z-axis')
 
 #Create cylinder object with radius 3, height 20, x center value of 4, y center value of 0, elevation of 15 and color 'blue'
-""" radius = 3
-height = 20
-x_center = 4
-y_center = 0
-elevation = 15
-color = 'b'
-cylinder1 = Cylinder(radius, height, x_center, y_center, elevation, color) """
-cylinder1 = Cylinder()
+cylinder1 = Cylinder(color='r')
 
 #Create drone object which inherits the beforementioned cylinder object values.
 drone1 = Drone(cylinder1)
 
 #Set x,y,z values from .csv file
-x, y, z =printcsv()
+x, y, z = printcsv()
 ax.scatter(x,y,z)
 l1, = ax.plot(x, y, z)
+
+for i in range (0, len(z), 100):
+    l2 = ax.quiver(x, y, z, x[i], y[i], z[i], normalize=True)
+
+#l2 = ax.quiver(x, y, z, )
+
 
 #Create sliders to set cylinder values
 ax_radius = fig.add_axes([0.2, 0.25, 0.0225, 0.63])
@@ -145,11 +149,19 @@ xcenter_slider.on_changed(cylinder1.update)
 ycenter_slider.on_changed(cylinder1.update)
 
 # Create a button to reset the sliders to initial values.
-resetax = fig.add_axes([0.8, 0.025, 0.1, 0.04])
-button = Button(resetax, 'Reset', hovercolor='0.975')
+ax_reset = fig.add_axes([0.8, 0.015, 0.15, 0.04])
+ax_map = fig.add_axes([0.8, 0.075, 0.15, 0.04])
+resetbutton = Button(ax_reset, 'Reset', hovercolor='0.975')
+mapbutton = Button(ax_map, 'Map coords', hovercolor='0.975')
+
 
 #Reset the slider values
-button.on_clicked(reset)
+resetbutton.on_clicked(reset)
+mapbutton.on_clicked(drone1.map_coords(x))
+mapbutton.on_clicked(drone1.map_coords(y))
+
+print(x[0], x[1], y[0], y[1], z[0], z[1])
+
 
 plt.show()
 

@@ -1,41 +1,134 @@
 import csv
-import pandas
-# df = pandas.read_csv('drone_local_position_unformated.csv')
-# print(df['pose'][0])
-# print(df)
+import json
+import math
 
 
-# Get .csv file and put it into x,y,z list
+class DroneCSV():
+    def __init__(self):
+        self.times = []
+        self.time_start = []
+        self.header = []
+        # ----- Position ----
+        self.x = []
+        self.y = []
+        self.z = []
+        # ----- Orientation ----
+        self.xroll = []
+        self.ypitch = []
+        self.zyaw = []
+        self.w = []
 
+    def read_csv(self, id):
+        match id:
+            case "get_dlp":
+                with open("drone_local_position_unformated.csv", 'r') as file:
+                    headers = ['time', 'header', 'pose']
+                    csvreader = csv.DictReader(
+                        file, delimiter=',',  fieldnames=headers)
+                    for i, row in enumerate(csvreader):
+                        if i == 0:
+                            continue
 
-def printcsv():
-    DELIMITER = ',""'
-    # x = []
-    # y = []
-    # z = []
-    csv_file = open('drone_local_position_unformated.csv', "rb")
-    csv_reader = csv.reader((line.replace(',""', '|') for line in csv_file), delimiter='|')
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-            print(f'Column names are {",".join(row)}')
-            line_count += 1
-        else:
-            print(f'\t{row[0]}.')
-            break
+                        if i > 0:
+                            # ----- Times -----
+                            self.times.append(row['time'])
+
+                            # ----- Header -----
+                            self.header.append(row['header'])
+
+                            # ----- Position -----
+                            pose = row['pose'].replace("'", "\"")
+                            cdict_pose = json.loads(pose)
+                            self.x.append(cdict_pose['position']['x'])
+                            self.y.append(cdict_pose['position']['y'])
+                            self.z.append(cdict_pose['position']['z'])
+
+                            # ----- Orientation -----
+                            self.xroll.append(cdict_pose['orientation']['x'])
+                            self.ypitch.append(cdict_pose['orientation']['y'])
+                            self.zyaw.append(cdict_pose['orientation']['z'])
+                            self.w.append(cdict_pose['orientation']['w'])
+
+                    # ----- Position -----
+                    self.x = list(map(float, self.x))
+                    self.y = list(map(float, self.y))
+                    self.z = list(map(float, self.z))
+
+                    # ----- Orientation -----
+                    self.xroll = list(map(float, self.xroll))
+                    self.ypitch = list(map(float, self.ypitch))
+                    self.zyaw = list(map(float, self.zyaw))
+                    self.w = list(map(float, self.w))
+
+                return self.times, self.x, self.y, self.z, self.xroll, self.ypitch, self.zyaw, self.w
+
+            case "get_start":
+                with open("activate_offboard.csv", 'r') as file:
+                    headers = ['time', 'data']
+                    csvreader = csv.DictReader(
+                        file, delimiter=',',  fieldnames=headers)
+                    for i, row in enumerate(csvreader):
+                        if i == 0:
+                            continue
+
+                        if i > 0:
+                            # ----- Times -----
+                            self.time_start.append(row['time'])
+
+                return self.time_start
         
-        # for row in csv_reader:
-        #     x.append(row[0])
-        #     y.append(row[1])
-        #     z.append(row[2])
-        # x = list(map(float, x))
-        # y = list(map(float, y))
-        # z = list(map(float, z))
-        # return x, y, z
+            case _:
+                print("ERROR on ID: ", id, " -- No case with given ID")
+                exit(1)
+
+    def find_start(self, startime, alltime):
+        for i in range(len(alltime)):
+            if (startime[0][0:19] == alltime[i][0:19]):
+                return i
+
+    def offset(self, x, y, z, xr, yp, zy, w, offset, lead_up=10):
         
-printcsv()
+        
+        x = x[offset:]
+        y = y[offset:]
+        z = z[offset:]
 
+        xr = xr[offset:]
+        yp = yp[offset:]
+        zy = zy[offset:]
+        w = w[offset:]
 
-#%%
-f = open("drone_local_position_unformated.csv", 'r')
-# %%
+        return x, y, z, xr, yp, zy, w
+
+    def euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        roll_x = []
+        pitch_y = []
+        yaw_z = []
+        for i in range(len(w)):
+            t0 = +2.0 * (w[i] * xr[i] + yp[i] * zy[i])
+            t1 = +1.0 - 2.0 * (xr[i] * xr[i] + yp[i] * yp[i])
+            
+            t2 = +2.0 * (w[i] * yp[i] - zy[i] * xr[i])
+            t2 = +1.0 if t2 > +1.0 else t2
+            t2 = -1.0 if t2 < -1.0 else t2
+            
+            t3 = +2.0 * (w[i] * zy[i] + xr[i] * yp[i])
+            t4 = +1.0 - 2.0 * (yp[i] * yp[i] + zy[i] * zy[i])
+            
+            if (degrees == 1):
+                roll_x.append(math.degrees(math.atan2(t0, t1)))
+                pitch_y.append(math.degrees(math.asin(t2)))
+                yaw_z.append(math.degrees(math.atan2(t3, t4)))
+            
+            elif (degrees == 0):
+                roll_x.append(math.atan2(t0, t1))
+                pitch_y.append(math.asin(t2))
+                yaw_z.append(math.atan2(t3, t4))
+                
+        return roll_x, pitch_y, yaw_z  # in radians

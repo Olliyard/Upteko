@@ -1,4 +1,5 @@
 #%%
+#Includes
 from locale import normalize
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,25 +7,62 @@ import statistics as st
 import csv
 from matplotlib.widgets import Slider
 from matplotlib.widgets import Button
+from mpl_toolkits.mplot3d.proj3d import proj_transform
+from mpl_toolkits.mplot3d.axes3d import Axes3D
+from matplotlib.patches import FancyArrowPatch
 
+
+#Class 3D Arrow
+class Arrow3D(FancyArrowPatch):
+
+    def __init__(self, x, y, z, x2, y2, z2, *args, **kwargs):
+        super().__init__((0, 0), (0, 0), *args, **kwargs)
+        self._xyz = (x, y, z)
+        self._x2y2z2 = (x2, y2, z2)
+
+    def draw(self, renderer):
+        x1, y1, z1 = self._xyz
+        x2, y2, z2 = self._x2y2z2
+
+        xs, ys, zs = proj_transform((x1, x2), (y1, y2), (z1, z2), self.axes.M)
+        self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
+        super().draw(renderer)
+        
+    def do_3d_projection(self, renderer=None):
+        x1, y1, z1 = self._xyz
+        x2, y2, z2 = self._x2y2z2
+
+        xs, ys, zs = proj_transform((x1, x2), (y1, y2), (z1, z2), self.axes.M)
+        self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
+
+        return np.min(zs) 
+
+def _arrow3D(ax, x, y, z, x2, y2, z2, *args, **kwargs):
+    '''Add an 3d arrow to an `Axes3D` instance.'''
+
+    arrow = Arrow3D(x, y, z, x2, y2, z2, *args, **kwargs)
+    ax.add_artist(arrow)
+
+setattr(Axes3D, 'arrow3D', _arrow3D)
+
+
+#Get .csv file and put it into x,y,z list
 def printcsv():
     x = []
     y = []
     z = []
     with open('drone_local_position.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
         for row in csv_reader:
             x.append(row[0])
             y.append(row[1])
             z.append(row[2])
-            line_count += 1
         x = list(map(float, x))
         y = list(map(float, y))
         z = list(map(float, z))
         return x, y, z
 
-
+#Map the values of the coordinates to pre-set boundaries
 def map_range(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
@@ -40,7 +78,7 @@ def reset(event):
 
 #Used for creating and updating cylinder
 class Cylinder:
-    def __init__(self, radius = 1, height = 2, x_center = 0, y_center = 0, elevation = 0, color = 'b'):
+    def __init__(self, radius = 3, height = 20, x_center = 4, y_center = 0, elevation = 10, color = 'b'):
         self.radius = radius
         self.height = height
         self.color = color
@@ -111,9 +149,9 @@ fig = plt.figure()
 ax = plt.axes(projection = '3d')
 
 #Set axis labels
-ax.set_xlabel('x-axis')
-ax.set_ylabel('y-axis')
-ax.set_zlabel('z-axis')
+ax.set_xlabel('x-axis [m]')
+ax.set_ylabel('y-axis [m]')
+ax.set_zlabel('z-axis [m]')
 
 #Create cylinder object with radius 3, height 20, x center value of 4, y center value of 0, elevation of 15 and color 'blue'
 cylinder1 = Cylinder(color='r')
@@ -126,12 +164,14 @@ x, y, z = printcsv()
 ax.scatter(x,y,z)
 l1, = ax.plot(x, y, z)
 
-for i in range (0, len(z), 100):
-    l2 = ax.quiver(x, y, z, x[i], y[i], z[i], normalize=True)
+#Create arrows following direction of coords.
+step = 10
+for i in range(0, len(x)-step, step):
+    ax.arrow3D(x[i], y[i], z[i], x[i+step], y[i+step], z[i+step], mutation_scale=10, fc="red")
 
-#l2 = ax.quiver(x, y, z, )
 
 
+           
 #Create sliders to set cylinder values
 ax_radius = fig.add_axes([0.2, 0.25, 0.0225, 0.63])
 ax_height = fig.add_axes([0.15, 0.25, 0.0225, 0.63])

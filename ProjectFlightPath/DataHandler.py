@@ -3,11 +3,13 @@ import json
 import math
 
 
-class DroneCSV():
+class DataHandler():
     def __init__(self):
+        self.header = []
+        self.layout = []
+        # ----- Times -----
         self.times = []
         self.time_start = []
-        self.header = []
         # ----- Position ----
         self.x = []
         self.y = []
@@ -17,6 +19,8 @@ class DroneCSV():
         self.ypitch = []
         self.zyaw = []
         self.w = []
+        # ----- Camera pos -----
+        self.cam = []
 
     def read_csv(self, id):
         match id:
@@ -77,6 +81,23 @@ class DroneCSV():
 
                 return self.time_start
         
+            case "get_camera":
+                with open("local_position_targets.csv", 'r') as file:
+                    headers = ['time', 'layout', 'data']
+                    csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
+                    for i, row in enumerate(csvreader):
+                        if i == 0:
+                            continue
+                        if i > 0:
+                            layout = row['layout'].replace("'", "\"")
+                            cdict_layout = json.loads(layout)
+                            self.layout.append(cdict_layout['data_offset'])
+                            self.cam.append(row['data'])
+                            
+                        self.layout = list(map(float, self.layout))    
+                        #self.cam = list(map(float, self.cam))
+                return self.layout, self.cam
+        
             case _:
                 print("ERROR on ID: ", id, " -- No case with given ID")
                 exit(1)
@@ -87,8 +108,6 @@ class DroneCSV():
                 return i
 
     def offset(self, x, y, z, xr, yp, zy, w, offset, lead_up=10):
-        
-        
         x = x[offset:]
         y = y[offset:]
         z = z[offset:]
@@ -97,8 +116,8 @@ class DroneCSV():
         yp = yp[offset:]
         zy = zy[offset:]
         w = w[offset:]
-
         return x, y, z, xr, yp, zy, w
+
 
     def euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
         """

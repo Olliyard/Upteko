@@ -1,7 +1,8 @@
 import csv
 import json
 import math
-
+from operator import index
+from unittest.mock import CallableMixin
 
 class DataHandler():
     def __init__(self):
@@ -84,6 +85,10 @@ class DataHandler():
             case "get_camera":
                 with open("local_position_targets.csv", 'r') as file:
                     headers = ['time', 'layout', 'data']
+                    data_x = []
+                    data_y = []
+                    data_z = []
+                    data_yaw = []
                     csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
                     for i, row in enumerate(csvreader):
                         if i == 0:
@@ -92,11 +97,22 @@ class DataHandler():
                             layout = row['layout'].replace("'", "\"")
                             cdict_layout = json.loads(layout)
                             self.layout.append(cdict_layout['data_offset'])
-                            self.cam.append(row['data'])
+                
+                            cam = row['data'].strip('][').split(', ')
+                            data_x.append(cam[0])
+                            data_y.append(cam[1])
+                            data_z.append(cam[2])
+                            data_yaw.append(cam[3])
                             
-                        self.layout = list(map(float, self.layout))    
-                        #self.cam = list(map(float, self.cam))
-                return self.layout, self.cam
+                            #self.cam.append(cam)
+                            #print("Type cam: ", type(self.cam))
+                            
+                        self.layout = list(map(float, self.layout))
+                        data_x = list(map(float, data_x))
+                        data_y = list(map(float, data_y))
+                        data_z = list(map(float, data_z))
+                        data_yaw = list(map(float, data_yaw))
+                return self.layout, data_x, data_y, data_z, data_yaw
         
             case _:
                 print("ERROR on ID: ", id, " -- No case with given ID")

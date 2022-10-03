@@ -37,15 +37,15 @@ class Draw:
         self.ax.plot_surface(
             x_grid, y_grid, z_grid, linewidth=0, color=color)
 
-    def draw_dronepath(self, x, y, z, offset, with_arrow=0, step = 10):
+    def draw_dronepath(self, x, y, z, offset, c = 'b', with_arrow=0, step = 10):
         x_off = x[0:offset]
         y_off = y[0:offset]
         z_off = z[0:offset]
         self.ax.scatter(x_off, y_off, z_off, color='r')
         self.ax.plot(x_off, y_off, z_off, color ='r')
 
-        self.ax.scatter(x[offset:], y[offset:], z[offset:], color='b')
-        self.ax.plot(x[offset:], y[offset:], z[offset:], color='b')
+        self.ax.scatter(x[offset:], y[offset:], z[offset:], color=c)
+        self.ax.plot(x[offset:], y[offset:], z[offset:], color=c)
 
         if(with_arrow == 1):
             #Create arrows following direction of coords.
@@ -71,28 +71,31 @@ class Draw:
         return  camera_x, camera_y
 
     # Spherical coordinates to rectangular (cartesian) coordinates. Plots in reference to origin
-    def spherical_to_rectangular_coordinates(self, x_p, y_p, z_p, pitch, yaw, l=1):
-        x = []
-        y = []
-        z = []
-        step = 10
-        for index in range(0, len(pitch)):
+    def spherical_to_rectangular_coordinates(self, data_x, data_y, data_z, pitch, yaw, l=1, step=1):
+        cam_x = []
+        cam_y = []
+        cam_z = []
+        for index in range(0, len(data_x)-step, step):
             # x = (self.x_center + ((l * math.sin(yaw[index])) * math.cos(pitch[index])))
             # y = (self.y_center + ((l * math.sin(yaw[index])) * math.sin(pitch[index])))
             # z = (self.z_center + (l * math.cos(yaw[index])))
+            # print("Types: ")
+            # print("Yaw: ", type(yaw[index]))
+            # print("Pitch: ", type(pitch[index]))
+            # print("Size of datapoints: ", len(datapoints))            
+
+            cam_x.append((data_x[index] + ((l * math.sin(yaw[index])) * math.cos(pitch[index]))))
+            cam_y.append((data_y[index] + ((l * math.sin(yaw[index])) * math.sin(pitch[index]))))
+            cam_z.append((data_z[index] + (l * math.cos(yaw[index]))))
             
-            x.append((self.x_center +((l * math.sin(yaw[index])) * math.cos(pitch[index]))))
-            y.append((self.y_center +((l * math.sin(yaw[index])) * math.sin(pitch[index]))))
-            z.append((self.z_center +(l * math.cos(yaw[index]))))
+            #self.ax.arrow3D(x_p[index], y_p[index], z_p[index], x, y, z, mutation_scale=10, fc="yellow")
         
 
-        self.ax.scatter(x, y, z, color='y')
-        self.ax.plot(x,y,z,color='y')
-        print("x_new size: ", len(x))
-        print("x_old size: ", len(x_p))
+        self.ax.scatter(cam_x, cam_y, cam_z, color='y')
+        # self.ax.plot(cam_x,cam_y,cam_z,color='y')
         #self.ax.arrow3D(x_p, y_p, z_p, x, y, z, mutation_scale=10, fc="yellow")
         
-        return x,y,z
+        return cam_x,cam_y,cam_z
 
 
 def map_range(x, in_min, in_max, out_min, out_max):

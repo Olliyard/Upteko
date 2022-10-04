@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Arrow3D as arw3D
 import math
+import matplotlib
+
 
 
 # Map the values of the coordinates to pre-set boundaries
@@ -57,19 +59,25 @@ class Draw:
         
     # ------------------ TESTS ------------------ #
     ## 2d only, for now, sin, cos for three planes.
-    def camera_plots(self, x,y, zyaw):
-        camera_x = []
-        camera_y = []
-        length = 1
-
-        for i in range(0, len(x), 1):
-            camera_x.append(length * math.cos(zyaw[i]) + x[i])
-            camera_y(length * math.sin(zyaw[i] + y[i]))
-
-        self.ax.scatter(camera_x, camera_y, z_off, color='r')
-        self.ax.plot(x_off, y_off, z_off, color ='r')
-        return  camera_x, camera_y
-
+    #def camera_plots(self, xp, yp, zp, xo, yo, zo):
+    def camera_plots(self, xp, yp, zp, xo, yo, zo):
+        r=3
+        for i in range(0, len(xp), 30):
+            self.ax.arrow3D(
+            xp[i], 
+            yp[i], 
+            zp[i],
+            xp[i]+r*(np.cos(xo[i])), 
+            yp[i]+r*(np.sin(yo[i])),
+            zp[i]+r*(np.sin(zo[i])), 
+            mutation_scale=10, 
+            fc="red")
+        """
+        ## draw arrow
+            r = 1  # or whatever fits you
+            for i in range(0,len(xp),1):
+                matplotlib.pyplot.arrow(xp[i], yp[i], (r*np.cos(xo[i])), (r*np.sin(xo[i])))
+        """
     # Spherical coordinates to rectangular (cartesian) coordinates. Plots in reference to origin
     def spherical_to_rectangular_coordinates(self, data_x, data_y, data_z, pitch, yaw, l=1, step=1):
         cam_x = []

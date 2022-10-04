@@ -88,7 +88,7 @@ class DataHandler():
                     data_x = []
                     data_y = []
                     data_z = []
-                    data_yaw = []
+                    data_w = []
                     csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
                     for i, row in enumerate(csvreader):
                         if i == 0:
@@ -102,17 +102,24 @@ class DataHandler():
                             data_x.append(cam[0])
                             data_y.append(cam[1])
                             data_z.append(cam[2])
-                            data_yaw.append(cam[3])
+                            data_w.append(cam[3])
                             
                             #self.cam.append(cam)
                             #print("Type cam: ", type(self.cam))
+
                             
                         self.layout = list(map(float, self.layout))
                         data_x = list(map(float, data_x))
                         data_y = list(map(float, data_y))
                         data_z = list(map(float, data_z))
-                        data_yaw = list(map(float, data_yaw))
-                return self.layout, data_x, data_y, data_z, data_yaw
+                        data_w = list(map(float, data_w))
+                    
+                    print("cam: data_x: ", len(data_x))
+                    print("cam: data_y: ", len(data_y))
+                    print("cam: data_z: ", len(data_z))
+                    print("cam: data_yaw: ", len(data_w))
+                    
+                return self.layout, data_x, data_y, data_z, data_w
         
             case _:
                 print("ERROR on ID: ", id, " -- No case with given ID")
@@ -134,6 +141,35 @@ class DataHandler():
         w = w[offset:]
         return x, y, z, xr, yp, zy, w
 
+
+    def test_euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        roll_x = []
+        pitch_y = []
+        yaw_z = []
+        for i in range(len(w)):
+            t0 = +2.0 * (w[i] * xr[i] + yp[i] * zy[i])
+            t1 = +1.0 - 2.0 * (xr[i] * xr[i] + yp[i] * yp[i])
+            roll_x.append(math.atan2(t0, t1))
+            
+            t2 = +2.0 * (w[i] * yp[i] - zy[i] * xr[i])
+            t2 = +1.0 if t2 > +1.0 else t2
+            t2 = -1.0 if t2 < -1.0 else t2
+            pitch_y.append(math.asin(t2))
+            
+            t3 = +2.0 * (w[i] * zy[i] + xr[i] * yp[i])
+            t4 = +1.0 - 2.0 * (yp[i] * yp[i] + zy[i] * zy[i])
+            yaw_z.append(math.atan2(t3, t4))
+
+        roll_x = list(map(float, roll_x))
+        pitch_y = list(map(float, pitch_y))
+        yaw_z = list(map(float, yaw_z))    
+        return roll_x, pitch_y, yaw_z  # in radians
 
     def euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
         """

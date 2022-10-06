@@ -104,10 +104,6 @@ class DataHandler():
                             data_z.append(cam[2])
                             data_w.append(cam[3])
                             
-                            #self.cam.append(cam)
-                            #print("Type cam: ", type(self.cam))
-
-                            
                         self.layout = list(map(float, self.layout))
                         data_x = list(map(float, data_x))
                         data_y = list(map(float, data_y))
@@ -141,8 +137,7 @@ class DataHandler():
         w = w[offset:]
         return x, y, z, xr, yp, zy, w
 
-
-    def test_euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
+    def euler_from_quaternion(self, xo, yo, zo, wo):
         """
         Convert a quaternion into euler angles (roll, pitch, yaw)
         roll is rotation around x in radians (counterclockwise)
@@ -152,54 +147,25 @@ class DataHandler():
         roll_x = []
         pitch_y = []
         yaw_z = []
-        for i in range(len(w)):
-            t0 = +2.0 * (w[i] * xr[i] + yp[i] * zy[i])
-            t1 = +1.0 - 2.0 * (xr[i] * xr[i] + yp[i] * yp[i])
-            roll_x.append(math.atan2(t0, t1))
+
+        for i in range(len(wo)):
+            t0 = +2.0 * (wo[i] * xo[i] + yo[i] * zo[i])
+            t1 = +1.0 - 2.0 * (xo[i] * xo[i] + yo[i] * yo[i])
             
-            t2 = +2.0 * (w[i] * yp[i] - zy[i] * xr[i])
+            t2 = +2.0 * (wo[i] * yo[i] - zo[i] * xo[i])
             t2 = +1.0 if t2 > +1.0 else t2
             t2 = -1.0 if t2 < -1.0 else t2
-            pitch_y.append(math.asin(t2))
             
-            t3 = +2.0 * (w[i] * zy[i] + xr[i] * yp[i])
-            t4 = +1.0 - 2.0 * (yp[i] * yp[i] + zy[i] * zy[i])
+            t3 = +2.0 * (wo[i] * zo[i] + xo[i] * yo[i])
+            t4 = +1.0 - 2.0 * (yo[i] * yo[i] + zo[i] * zo[i])
+            
+            roll_x.append(math.atan2(t0, t1))
+            pitch_y.append(math.asin(t2))
             yaw_z.append(math.atan2(t3, t4))
-
+                
         roll_x = list(map(float, roll_x))
         pitch_y = list(map(float, pitch_y))
-        yaw_z = list(map(float, yaw_z))    
+        yaw_z = list(map(float, yaw_z))     
+
         return roll_x, pitch_y, yaw_z  # in radians
 
-    def euler_from_quaternion(self, xr, yp, zy, w, degrees=0):
-        """
-        Convert a quaternion into euler angles (roll, pitch, yaw)
-        roll is rotation around x in radians (counterclockwise)
-        pitch is rotation around y in radians (counterclockwise)
-        yaw is rotation around z in radians (counterclockwise)
-        """
-        roll_x = []
-        pitch_y = []
-        yaw_z = []
-        for i in range(len(w)):
-            t0 = +2.0 * (w[i] * xr[i] + yp[i] * zy[i])
-            t1 = +1.0 - 2.0 * (xr[i] * xr[i] + yp[i] * yp[i])
-            
-            t2 = +2.0 * (w[i] * yp[i] - zy[i] * xr[i])
-            t2 = +1.0 if t2 > +1.0 else t2
-            t2 = -1.0 if t2 < -1.0 else t2
-            
-            t3 = +2.0 * (w[i] * zy[i] + xr[i] * yp[i])
-            t4 = +1.0 - 2.0 * (yp[i] * yp[i] + zy[i] * zy[i])
-            
-            if (degrees == 1):
-                roll_x.append(math.degrees(math.atan2(t0, t1)))
-                pitch_y.append(math.degrees(math.asin(t2)))
-                yaw_z.append(math.degrees(math.atan2(t3, t4)))
-            
-            elif (degrees == 0):
-                roll_x.append(math.atan2(t0, t1))
-                pitch_y.append(math.asin(t2))
-                yaw_z.append(math.atan2(t3, t4))
-                
-        return roll_x, pitch_y, yaw_z  # in radians

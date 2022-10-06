@@ -60,22 +60,43 @@ class Draw:
     # ------------------ TESTS ------------------ #
     # 2d only, for now, sin, cos for three planes.
     def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z):
-        r = 3
-        for i in range(0, len(xp), r):
+        r = 15
+        for i in range(0, len(xp), 10):
             u = r*np.cos(yaw_z[i])
             w = r*np.sin(yaw_z[i])
-            self.ax.quiver(xp[i], yp[i], zp[i], u, w, 0, color='r')
-
+            #self.ax.quiver(xp[i], yp[i], zp[i], u, w, 0, color='r')
             """
-            u = np.sin(np.pi * roll) * np.cos(np.pi * pitch) * \
-                np.cos(np.pi * yaw)
-            v = -np.cos(np.pi * roll) * np.sin(np.pi * pitch) * \
-                np.cos(np.pi * yaw)
-            w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll) *
-                 np.cos(np.pi * pitch) * np.sin(np.pi * yaw))
+            # ---------------------- MAKE CYAN VECTORS ------------------- #
+            variation = 0.3
+            new_u = r*np.cos(yaw_z[i]+variation)
+            new_w = r*np.sin(yaw_z[i]+variation)
+            self.ax.quiver(xp[i], yp[i], zp[i], new_u, new_w, 0, color='c')
             
-            self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
+            variation = -variation
+            new_u = r*np.cos(yaw_z[i]+variation)
+            new_w = r*np.sin(yaw_z[i]+variation)
+            self.ax.quiver(xp[i], yp[i], zp[i], new_u, new_w, 0, color='c')
+
+            # ---------------------- MAKE MAGENTA VECTORS ------------------- #
+            variation = 0
+            self.ax.quiver(xp[i]+u, yp[i]+w, zp[i], np.cos(variation), np.sin(variation), 0, color='m')
+
+            variation = -np.pi
+            self.ax.quiver(xp[i]+u, yp[i]+w, zp[i], np.cos(variation), np.sin(variation), 0, color='m')
+
+            # ---------------------- NEEDS TESTING ------------------- #
             """
+            u = np.sin(np.pi * roll_x[i]) * np.cos(np.pi * pitch_y[i]) * \
+                np.cos(np.pi * yaw_z[i])
+            v = -np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
+                np.cos(np.pi * yaw_z[i])
+            w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll_x[i]) *
+                 np.cos(np.pi * pitch_y[i]) * np.sin(np.pi * yaw_z[i]))
+            
+
+            self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, normalize=True, color='m')
+            #self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
+            
 
 
     def map_range(x, in_min, in_max, out_min, out_max):

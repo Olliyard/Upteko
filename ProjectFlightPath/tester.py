@@ -1,61 +1,38 @@
+from mpl_toolkits import mplot3d
 import numpy as np
-import math
+import matplotlib.pyplot as plt
+from matplotlib import cm
 
-### MATHIAS
-def euler_from_quaternion(x, y, z, w):
-        """
-        Convert a quaternion into euler angles (roll, pitch, yaw)
-        roll is rotation around x in radians (counterclockwise)
-        pitch is rotation around y in radians (counterclockwise)
-        yaw is rotation around z in radians (counterclockwise)
-        """
-        t0 = +2.0 * (w * x + y * z)
-        t1 = +1.0 - 2.0 * (x * x + y * y)
-        roll_x = math.atan2(t0, t1)
-        t2 = +2.0 * (w * y - z * x)
-        t2 = +1.0 if t2 > +1.0 else t2
-        t2 = -1.0 if t2 < -1.0 else t2
-        pitch_y = math.asin(t2)
-        t3 = +2.0 * (w * z + x * y)
-        t4 = +1.0 - 2.0 * (y * y + z * z)
-        yaw_z = math.atan2(t3, t4)
-        return roll_x, pitch_y, yaw_z # in radians
+def f(x, y):
+    return np.sqrt(x ** 2 + y ** 2)
 
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+# Can manipulate with 100j and 80j values to make your cone looks different
+u, v = np.mgrid[0:2*np.pi:100j, 0:np.pi:80j]
+x = np.cos(u)*np.sin(v)
+y = np.sin(u)*np.sin(v)
+z = f(x, y)
 
-# Map the values of the coordinates to pre-set boundaries
-def quaternion_to_euler(w, x, y, z):
- 
-        t0 = 2 * (w * x + y * z)
-        t1 = 1 - 2 * (x * x + y * y)
-        X = np.arctan2(t0, t1)
- 
-        t2 = 2 * (w * y - z * x)
-        t2 = 1 if t2 > 1 else t2
-        t2 = -1 if t2 < -1 else t2
-        Y = np.arcsin(t2)
-         
-        t3 = 2 * (w * z + x * y)
-        t4 = 1 - 2 * (y * y + z * z)
-        Z = np.arctan2(t3, t4)
- 
-        return X, Y, Z
+ax.plot_surface(x, y, z, cmap=cm.coolwarm)
 
+# Some other effects you may want to try based on your needs:
+# ax.plot_surface(x, y, -z, cmap=cm.coolwarm)
+# ax.scatter3D(x, y, z, color="b")
+# ax.plot_wireframe(x, y, z, color="b")
+# ax.plot_wireframe(x, y, -z, color="r")
 
+# Can set your view from different angles. 
+ax.view_init(azim=15, elev=15)
+ax.set_xlabel("x")
+ax.set_ylabel("y")
+ax.set_zlabel("z")
+plt.show()
+ax.set_ylabel("y")
+ax.set_zlabel("z")
+plt.show()
 
-### TEST 1
-x=0
-y=0
-z=0
-w=1
-#test1 = euler_from_quaternion(x, y, z, w)
-test1 = quaternion_to_euler(w, x, y, z) ###
-print("Test 1:", test1)
-
-### TEST 2
-x=0
-y=0
-z=0.5
-w=0.5
-#test2 = euler_from_quaternion(x, y, z, w)
-test2 = quaternion_to_euler(w, x, y, z) ###
-print("Test 2:", test2)
+# Actually not sure about the math here though:
+u, v = np.mgrid[0:2*np.pi:100j, 0:np.pi:20j]
+x = np.cos(u)*np.sin(v)
+y = np.sin(u)*np.sin(v)

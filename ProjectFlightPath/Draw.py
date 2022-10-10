@@ -60,10 +60,11 @@ class Draw:
     # ------------------ TESTS ------------------ #
     # 2d only, for now, sin, cos for three planes.
     def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z):
-        r = 15
-        for i in range(0, len(xp), 10):
+        r = 1
+        for i in range(0, len(xp), 1):
             u = r*np.cos(yaw_z[i])
             w = r*np.sin(yaw_z[i])
+            
             #self.ax.quiver(xp[i], yp[i], zp[i], u, w, 0, color='r')
             """
             # ---------------------- MAKE CYAN VECTORS ------------------- #
@@ -86,15 +87,15 @@ class Draw:
 
             # ---------------------- NEEDS TESTING ------------------- #
             """
-            u = np.sin(np.pi * roll_x[i]) * np.cos(np.pi * pitch_y[i]) * \
-                np.cos(np.pi * yaw_z[i])
-            v = -np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
-                np.cos(np.pi * yaw_z[i])
-            w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll_x[i]) *
-                 np.cos(np.pi * pitch_y[i]) * np.sin(np.pi * yaw_z[i]))
+            #u = np.sin(np.pi * roll_x[i]) * np.cos(np.pi * pitch_y[i]) * \
+            #    np.cos(np.pi * yaw_z[i])
+            v = r*(-np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
+                np.cos(np.pi * yaw_z[i]))
+            #w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll_x[i]) *
+            #     np.cos(np.pi * pitch_y[i]) * np.sin(np.pi * yaw_z[i]))
             
 
-            self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, normalize=True, color='m')
+            self.ax.quiver(xp[i], yp[i], zp[i], u, w, v, normalize=True, color='m')
             #self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
             
 

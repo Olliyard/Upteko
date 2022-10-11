@@ -1,38 +1,54 @@
-from mpl_toolkits import mplot3d
-import numpy as np
+xfrom mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import matplotlib.pyplot as plt
-from matplotlib import cm
 
-def f(x, y):
-    return np.sqrt(x ** 2 + y ** 2)
 
 fig = plt.figure()
-ax = plt.axes(projection='3d')
-# Can manipulate with 100j and 80j values to make your cone looks different
-u, v = np.mgrid[0:2*np.pi:100j, 0:np.pi:80j]
-x = np.cos(u)*np.sin(v)
-y = np.sin(u)*np.sin(v)
-z = f(x, y)
+ax = Axes3D(fig)
 
-ax.plot_surface(x, y, z, cmap=cm.coolwarm)
+x = [0,1,1,0],[0,1,1,0]
+y = [0,0,1,1],[0,0,1,1]
+z = [0,0,0,0],[1,1,1,1]
 
-# Some other effects you may want to try based on your needs:
-# ax.plot_surface(x, y, -z, cmap=cm.coolwarm)
-# ax.scatter3D(x, y, z, color="b")
-# ax.plot_wireframe(x, y, z, color="b")
-# ax.plot_wireframe(x, y, -z, color="r")
+surfaces = []
 
-# Can set your view from different angles. 
-ax.view_init(azim=15, elev=15)
-ax.set_xlabel("x")
-ax.set_ylabel("y")
-ax.set_zlabel("z")
-plt.show()
-ax.set_ylabel("y")
-ax.set_zlabel("z")
+for i in range(len(x)):
+    surfaces.append( [list(zip(x[i],y[i],z[i]))] )
+
+for surface in surfaces:
+    ax.add_collection3d(Poly3DCollection(surface))
+
 plt.show()
 
-# Actually not sure about the math here though:
-u, v = np.mgrid[0:2*np.pi:100j, 0:np.pi:20j]
-x = np.cos(u)*np.sin(v)
-y = np.sin(u)*np.sin(v)
+"""
+            """
+            var1 = 0.8
+            var2 = 1.2
+            step = 0.001
+            #print([i])
+            if xp[i] < 0:
+                step = -0.001
+            elif xp[i] > 0:
+                step = 0.001
+            X = np.arange(xp[i]*var1, xp[i]*var2, step)
+
+            if yp[i] < 0:
+                step = -0.001
+            elif yp[i] > 0:
+                step = 0.001
+            Y = np.arange(yp[i]*var1, yp[i]*var2, step)
+
+            
+            
+            #(x, y) = np.meshgrid(np.arange(-1, 3.1, 1), np.arange(-1, 1.1, 1))
+            #if i == 0:
+            
+            test = i
+            print(np.arange(xp[test]*0.8, xp[test]*1.2, 0.001))
+            (x, y) = np.meshgrid(np.linspace(xp[test]*0.8, xp[test]*1.2, 100), np.linspace(yp[test]*0.8, yp[test]*1.2, 100))
+                #print(x)
+                #print(y)
+            z = x+y
+            self.ax.plot_surface(x, y, z, alpha=0.5)
+            """
+"""

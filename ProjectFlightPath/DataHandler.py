@@ -24,102 +24,101 @@ class DataHandler():
         self.cam = []
 
     def read_csv(self, id):
-        match id:
-            case "get_dlp":
-                with open("drone_local_position_unformated.csv", 'r') as file:
-                    headers = ['time', 'header', 'pose']
-                    csvreader = csv.DictReader(
-                        file, delimiter=',',  fieldnames=headers)
-                    for i, row in enumerate(csvreader):
-                        if i == 0:
-                            continue
+        if id == "get_dlp":
+            with open("data/drone_local_position_unformated.csv", 'r') as file:
+                headers = ['time', 'header', 'pose']
+                csvreader = csv.DictReader(
+                    file, delimiter=',',  fieldnames=headers)
+                for i, row in enumerate(csvreader):
+                    if i == 0:
+                        continue
 
-                        if i > 0:
-                            # ----- Times -----
-                            self.times.append(row['time'])
+                    if i > 0:
+                        # ----- Times -----
+                        self.times.append(row['time'])
 
-                            # ----- Header -----
-                            self.header.append(row['header'])
+                        # ----- Header -----
+                        self.header.append(row['header'])
 
-                            # ----- Position -----
-                            pose = row['pose'].replace("'", "\"")
-                            cdict_pose = json.loads(pose)
-                            self.x.append(cdict_pose['position']['x'])
-                            self.y.append(cdict_pose['position']['y'])
-                            self.z.append(cdict_pose['position']['z'])
+                        # ----- Position -----
+                        pose = row['pose'].replace("'", "\"")
+                        cdict_pose = json.loads(pose)
+                        self.x.append(cdict_pose['position']['x'])
+                        self.y.append(cdict_pose['position']['y'])
+                        self.z.append(cdict_pose['position']['z'])
 
-                            # ----- Orientation -----
-                            self.xroll.append(cdict_pose['orientation']['x'])
-                            self.ypitch.append(cdict_pose['orientation']['y'])
-                            self.zyaw.append(cdict_pose['orientation']['z'])
-                            self.w.append(cdict_pose['orientation']['w'])
+                        # ----- Orientation -----
+                        self.xroll.append(cdict_pose['orientation']['x'])
+                        self.ypitch.append(cdict_pose['orientation']['y'])
+                        self.zyaw.append(cdict_pose['orientation']['z'])
+                        self.w.append(cdict_pose['orientation']['w'])
 
-                    # ----- Position -----
-                    self.x = list(map(float, self.x))
-                    self.y = list(map(float, self.y))
-                    self.z = list(map(float, self.z))
+                # ----- Position -----
+                self.x = list(map(float, self.x))
+                self.y = list(map(float, self.y))
+                self.z = list(map(float, self.z))
 
-                    # ----- Orientation -----
-                    self.xroll = list(map(float, self.xroll))
-                    self.ypitch = list(map(float, self.ypitch))
-                    self.zyaw = list(map(float, self.zyaw))
-                    self.w = list(map(float, self.w))
+                # ----- Orientation -----
+                self.xroll = list(map(float, self.xroll))
+                self.ypitch = list(map(float, self.ypitch))
+                self.zyaw = list(map(float, self.zyaw))
+                self.w = list(map(float, self.w))
 
-                return self.times, self.x, self.y, self.z, self.xroll, self.ypitch, self.zyaw, self.w
+            return self.times, self.x, self.y, self.z, self.xroll, self.ypitch, self.zyaw, self.w
 
-            case "get_start":
-                with open("activate_offboard.csv", 'r') as file:
-                    headers = ['time', 'data']
-                    csvreader = csv.DictReader(
-                        file, delimiter=',',  fieldnames=headers)
-                    for i, row in enumerate(csvreader):
-                        if i == 0:
-                            continue
+        elif id == "get_start":
+            with open("data/activate_offboard.csv", 'r') as file:
+                headers = ['time', 'data']
+                csvreader = csv.DictReader(
+                    file, delimiter=',',  fieldnames=headers)
+                for i, row in enumerate(csvreader):
+                    if i == 0:
+                        continue
 
-                        if i > 0:
-                            # ----- Times -----
-                            self.time_start.append(row['time'])
+                    if i > 0:
+                        # ----- Times -----
+                        self.time_start.append(row['time'])
 
-                return self.time_start
-        
-            case "get_camera":
-                with open("local_position_targets.csv", 'r') as file:
-                    headers = ['time', 'layout', 'data']
-                    data_x = []
-                    data_y = []
-                    data_z = []
-                    data_w = []
-                    csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
-                    for i, row in enumerate(csvreader):
-                        if i == 0:
-                            continue
-                        if i > 0:
-                            layout = row['layout'].replace("'", "\"")
-                            cdict_layout = json.loads(layout)
-                            self.layout.append(cdict_layout['data_offset'])
+            return self.time_start
+    
+        elif id == "get_camera":
+            with open("data/local_position_targets.csv", 'r') as file:
+                headers = ['time', 'layout', 'data']
+                data_x = []
+                data_y = []
+                data_z = []
+                data_w = []
+                csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
+                for i, row in enumerate(csvreader):
+                    if i == 0:
+                        continue
+                    if i > 0:
+                        layout = row['layout'].replace("'", "\"")
+                        cdict_layout = json.loads(layout)
+                        self.layout.append(cdict_layout['data_offset'])
+            
+                        cam = row['data'].strip('][').split(', ')
+                        data_x.append(cam[0])
+                        data_y.append(cam[1])
+                        data_z.append(cam[2])
+                        data_w.append(cam[3])
+                        
+                    self.layout = list(map(float, self.layout))
+                    data_x = list(map(float, data_x))
+                    data_y = list(map(float, data_y))
+                    data_z = list(map(float, data_z))
+                    data_w = list(map(float, data_w))
                 
-                            cam = row['data'].strip('][').split(', ')
-                            data_x.append(cam[0])
-                            data_y.append(cam[1])
-                            data_z.append(cam[2])
-                            data_w.append(cam[3])
-                            
-                        self.layout = list(map(float, self.layout))
-                        data_x = list(map(float, data_x))
-                        data_y = list(map(float, data_y))
-                        data_z = list(map(float, data_z))
-                        data_w = list(map(float, data_w))
-                    
-                    print("cam: data_x: ", len(data_x))
-                    print("cam: data_y: ", len(data_y))
-                    print("cam: data_z: ", len(data_z))
-                    print("cam: data_yaw: ", len(data_w))
-                    
-                return self.layout, data_x, data_y, data_z, data_w
-        
-            case _:
-                print("ERROR on ID: ", id, " -- No case with given ID")
-                exit(1)
+                print("cam: data_x: ", len(data_x))
+                print("cam: data_y: ", len(data_y))
+                print("cam: data_z: ", len(data_z))
+                print("cam: data_yaw: ", len(data_w))
+                
+            return self.layout, data_x, data_y, data_z, data_w
+    
+        else:
+            print("ERROR on ID: ", id, " -- No case with given ID")
+            exit(1)
 
     def find_start(self, startime, alltime):
         for i in range(len(alltime)):

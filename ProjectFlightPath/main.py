@@ -1,11 +1,16 @@
-# %%
-# Includes
+#!/usr/bin/env python
+
 from locale import normalize
 import Draw as drw
 import DataHandler as dh
 
 # Get .csv file and put it into x,y,z list
 
+# how to use:
+# 1. cp <rosbag>/<timestamp>/global_planner/request.csv data/global_plan_genneration_request.csv
+# 2. cp <rosbag>/<timestamp>/navigation/activate_offboard.csv data/activate_offboard.csv
+# 3. cp <rosbag>/<timestamp>/drone_info/local_pos/position.csv data/drone_local_position_unformated.csv
+# 4. cp <rosbag>/<timestamp>/navigation/add_mission_point/local.csv data/local_position_targets.csv
 #-------------------------------------Draw--------------------------------------------#
 
 
@@ -19,7 +24,9 @@ def main():
     offset = dh1.find_start(time_start, time)
     
     draw1 = drw.Draw()
-    draw1.draw_cylinder()
+    draw1.draw_cylinder(radius=4, height=32, x_center=4 , y_center=4, elevation=2)
+    # def draw_cylinder(self, radius=3, height=20, x_center=4, y_center=0, elevation=10, color='b'):
+
     draw1.draw_dronepath(xp, yp, zp, 100, c='g')
 
     # TEST

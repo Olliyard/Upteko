@@ -1,3 +1,4 @@
+from itertools import combinations, product
 from math import atan2, asin
 from locale import normalize
 import statistics as st
@@ -5,8 +6,6 @@ import statistics as st
 import matplotlib.pyplot as plt
 import math
 import numpy as np
-
-
 
 
 
@@ -60,43 +59,24 @@ class Draw:
     # ------------------ TESTS ------------------ #
     # 2d only, for now, sin, cos for three planes.
     def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z):
+        
         r = 1
-        for i in range(0, len(xp), 1):
+        for i in range(0, len(xp), 10):
+
             u = r*np.cos(yaw_z[i])
             w = r*np.sin(yaw_z[i])
-            
-            #self.ax.quiver(xp[i], yp[i], zp[i], u, w, 0, color='r')
-            """
-            # ---------------------- MAKE CYAN VECTORS ------------------- #
-            variation = 0.3
-            new_u = r*np.cos(yaw_z[i]+variation)
-            new_w = r*np.sin(yaw_z[i]+variation)
-            self.ax.quiver(xp[i], yp[i], zp[i], new_u, new_w, 0, color='c')
-            
-            variation = -variation
-            new_u = r*np.cos(yaw_z[i]+variation)
-            new_w = r*np.sin(yaw_z[i]+variation)
-            self.ax.quiver(xp[i], yp[i], zp[i], new_u, new_w, 0, color='c')
 
-            # ---------------------- MAKE MAGENTA VECTORS ------------------- #
-            variation = 0
-            self.ax.quiver(xp[i]+u, yp[i]+w, zp[i], np.cos(variation), np.sin(variation), 0, color='m')
-
-            variation = -np.pi
-            self.ax.quiver(xp[i]+u, yp[i]+w, zp[i], np.cos(variation), np.sin(variation), 0, color='m')
-
-            # ---------------------- NEEDS TESTING ------------------- #
-            """
             #u = np.sin(np.pi * roll_x[i]) * np.cos(np.pi * pitch_y[i]) * \
             #    np.cos(np.pi * yaw_z[i])
             v = r*(-np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
                 np.cos(np.pi * yaw_z[i]))
             #w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll_x[i]) *
             #     np.cos(np.pi * pitch_y[i]) * np.sin(np.pi * yaw_z[i]))
-            
+            #self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
 
             self.ax.quiver(xp[i], yp[i], zp[i], u, w, v, normalize=True, color='m')
-            #self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
+
+
             
 
 

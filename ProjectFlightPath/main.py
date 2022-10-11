@@ -27,6 +27,8 @@ def main():
     draw1.camera_plots(xp, yp, zp, roll_x, pitch_y, yaw_z)
     draw1.draw_figure()
 
+    drw.drawPyramid()
+
 
 if __name__ == "__main__":
     main()

@@ -27,7 +27,9 @@ def main():
     draw1.camera_plots(xp, yp, zp, roll_x, pitch_y, yaw_z)
     draw1.draw_figure()
 
-    drw.drawPyramid()
+    layout, data_x, data_y, data_z, w = dh1.read_csv("get_camera")
+    draw1.ax.scatter(data_x, data_y, data_z, color='c')
+    draw1.ax.plot(data_x, data_y, data_z, color='c')
 
 
 if __name__ == "__main__":

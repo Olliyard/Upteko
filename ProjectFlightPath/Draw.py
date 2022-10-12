@@ -7,12 +7,10 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
-
-
 class Draw:
     def __init__(self):
         # Create 3D figure
-        self.fig = plt.figure()
+        self.fig = plt.figure(figsize=(12, 10))
         self.ax = plt.axes(projection='3d')
 
         # Set axis labels
@@ -20,8 +18,9 @@ class Draw:
         self.y_axis = self.ax.set_ylabel('y-axis [m]')
         self.z_axis = self.ax.set_zlabel('z-axis [m]')
 
-    def draw_cylinder(self, radius=3, height=20, x_center=4, y_center=0, elevation=10, color='b'):
+    def draw_cylinder(self, diameter=6, height=20, x_center=4, y_center=0, elevation=15, color='b'):
         self.resolution = 20
+        radius = 0.5*diameter
         self.x_center = x_center
         self.y_center = y_center
         self.radius = radius
@@ -32,8 +31,8 @@ class Draw:
         # Create a theta value to mesh with
         theta = np.linspace(0, 2*np.pi, self.resolution)
         theta_grid, z_grid = np.meshgrid(theta, z)
-        x_grid = radius * np.cos(theta_grid) + x_center
-        y_grid = radius * np.sin(theta_grid) + y_center
+        x_grid = (radius * np.cos(theta_grid)) + x_center
+        y_grid = (radius * np.sin(theta_grid)) + y_center
         self.ax.plot_surface(
             x_grid, y_grid, z_grid, linewidth=0, color=color)
 
@@ -58,9 +57,9 @@ class Draw:
 
     # ------------------ TESTS ------------------ #
     # 2d only, for now, sin, cos for three planes.
-    def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z):
+    def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z, r=1):
         
-        r = 1
+        
         for i in range(0, len(xp), 10):
 
             u = r*np.cos(yaw_z[i])

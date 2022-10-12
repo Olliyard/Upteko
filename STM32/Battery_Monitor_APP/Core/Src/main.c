@@ -426,25 +426,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED1_STATUS_Pin|LED2_STATUS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, RST_UI_Pin|DC_UI_Pin|SPI1_CS_UI_Pin|BOOT_BMS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, RST_UI_Pin|DC_UI_Pin|SPI1_CS_UI_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(BOOT_BMS_GPIO_Port, BOOT_BMS_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LED1_STATUS_Pin LED2_STATUS_Pin */
-  GPIO_InitStruct.Pin = LED1_STATUS_Pin|LED2_STATUS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(GPIOB, LED1_STATUS_Pin|LED2_STATUS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : TOGGLE_UI_Pin BUSY_UI_Pin */
   GPIO_InitStruct.Pin = TOGGLE_UI_Pin|BUSY_UI_Pin;
@@ -452,19 +441,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : RST_UI_Pin DC_UI_Pin SPI1_CS_UI_Pin */
-  GPIO_InitStruct.Pin = RST_UI_Pin|DC_UI_Pin|SPI1_CS_UI_Pin;
+  /*Configure GPIO pins : RST_UI_Pin DC_UI_Pin SPI1_CS_UI_Pin BOOT_BMS_Pin */
+  GPIO_InitStruct.Pin = RST_UI_Pin|DC_UI_Pin|SPI1_CS_UI_Pin|BOOT_BMS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BOOT_BMS_Pin */
-  GPIO_InitStruct.Pin = BOOT_BMS_Pin;
+  /*Configure GPIO pins : LED1_STATUS_Pin LED2_STATUS_Pin */
+  GPIO_InitStruct.Pin = LED1_STATUS_Pin|LED2_STATUS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(BOOT_BMS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ALERT_BMS_Pin */
   GPIO_InitStruct.Pin = ALERT_BMS_Pin;

@@ -1,6 +1,7 @@
 import csv
 import json
 import math
+from multiprocessing import current_process
 from operator import index
 from unittest.mock import CallableMixin
 
@@ -8,6 +9,11 @@ class DataHandler():
     def __init__(self):
         self.header = []
         self.layout = []
+        self.cylinder_height = 0
+        self.cylinder_elevation = 0
+        self.cylinder_xcenter = 0
+        self.cylinder_ycenter = 0
+        self.cylinder_diameter = 0
         # ----- Times -----
         self.times = []
         self.time_start = []
@@ -25,6 +31,32 @@ class DataHandler():
 
     def read_csv(self, id):
         match id:
+            case "get_cylinder_values":
+                with open("global_plan_genneration_request.csv", 'r') as file:
+                    headers = ['time','current_pose','current_pos_global','dist_blade_current','dist_blade_target','blade_length','first_blade_rotation','first_blade','inspect_targets','overlap_procentage']
+                    csvreader = csv.DictReader(
+                        file, delimiter=',', fieldnames=headers)
+                    for i, row in enumerate(csvreader):
+                        if i == 0:
+                            continue
+                        
+                        if i > 0:
+                            cur_pose = row['current_pose'].replace("'", "\"")
+                            cdict_cur_pose = json.loads(cur_pose)
+                            self.cylinder_elevation = cdict_cur_pose['position']['z']
+                                
+                            self.cylinder_xcenter = row['dist_blade_current']
+                            self.cylinder_diameter = row['dist_blade_target']
+                            self.cylinder_height = row['blade_length']
+                        
+                    #Look at this tomorrow
+                    self.cylinder_elevation = list(map(float, self.cylinder_elevation))
+                    self.cylinder_xcenter = list(map(float, self.cylinder_xcenter))
+                    self.cylinder_diameter = list(map(float, self.cylinder_diameter))
+                    self.cylinder_height = list(map(float, self.cylinder_height))
+
+                return self.cylinder_elevation, self.cylinder_xcenter, self.cylinder_diameter, self.cylinder_height
+            
             case "get_dlp":
                 with open("drone_local_position_unformated.csv", 'r') as file:
                     headers = ['time', 'header', 'pose']
@@ -91,9 +123,9 @@ class DataHandler():
                     data_w = []
                     csvreader = csv.DictReader(file, delimiter=',', fieldnames=headers)
                     for i, row in enumerate(csvreader):
-                        if i == 0:
+                        if i == 2:
                             continue
-                        if i > 0:
+                        if i > 2:
                             layout = row['layout'].replace("'", "\"")
                             cdict_layout = json.loads(layout)
                             self.layout.append(cdict_layout['data_offset'])
@@ -109,13 +141,6 @@ class DataHandler():
                         data_y = list(map(float, data_y))
                         data_z = list(map(float, data_z))
                         data_w = list(map(float, data_w))
-                    
-                    print("cam: data_x: ", len(data_x))
-                    print("cam: data_y: ", len(data_y))
-                    print("cam: data_z: ", len(data_z))
-                    print("cam: data_yaw: ", len(data_w))
-
-                
 
                 return self.layout, data_x, data_y, data_z, data_w
         

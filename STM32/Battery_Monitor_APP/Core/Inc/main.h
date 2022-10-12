@@ -57,10 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED1_STATUS_Pin GPIO_PIN_14
-#define LED1_STATUS_GPIO_Port GPIOC
-#define LED2_STATUS_Pin GPIO_PIN_15
-#define LED2_STATUS_GPIO_Port GPIOC
 #define TOGGLE_UI_Pin GPIO_PIN_0
 #define TOGGLE_UI_GPIO_Port GPIOA
 #define BUSY_UI_Pin GPIO_PIN_1
@@ -75,14 +71,18 @@ void Error_Handler(void);
 #define SPI1_SCK_UI_GPIO_Port GPIOA
 #define I2C3_SCL_BMS_Pin GPIO_PIN_7
 #define I2C3_SCL_BMS_GPIO_Port GPIOA
-#define BOOT_BMS_Pin GPIO_PIN_1
-#define BOOT_BMS_GPIO_Port GPIOB
-#define ALERT_BMS_Pin GPIO_PIN_8
-#define ALERT_BMS_GPIO_Port GPIOA
+#define LED1_STATUS_Pin GPIO_PIN_0
+#define LED1_STATUS_GPIO_Port GPIOB
+#define LED2_STATUS_Pin GPIO_PIN_1
+#define LED2_STATUS_GPIO_Port GPIOB
 #define I2C1_SCL_BMS_Pin GPIO_PIN_9
 #define I2C1_SCL_BMS_GPIO_Port GPIOA
 #define I2C1_SDA_BMS_Pin GPIO_PIN_10
 #define I2C1_SDA_BMS_GPIO_Port GPIOA
+#define ALERT_BMS_Pin GPIO_PIN_11
+#define ALERT_BMS_GPIO_Port GPIOA
+#define BOOT_BMS_Pin GPIO_PIN_12
+#define BOOT_BMS_GPIO_Port GPIOA
 #define I2C3_SDA_BMS_Pin GPIO_PIN_4
 #define I2C3_SDA_BMS_GPIO_Port GPIOB
 #define SPI1_MOSI_UI_Pin GPIO_PIN_5

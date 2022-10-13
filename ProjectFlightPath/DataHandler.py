@@ -9,14 +9,10 @@ class DataHandler():
     def __init__(self):
         self.header = []
         self.layout = []
-        self.cylinder_height = 0
-        self.cylinder_elevation = 0
-        self.cylinder_xcenter = 0
-        self.cylinder_ycenter = 0
-        self.cylinder_diameter = 0
         # ----- Times -----
         self.times = []
-        self.time_start = []
+        self.time_start1 = []
+        self.time_start2 = []
         # ----- Position ----
         self.x = []
         self.y = []
@@ -32,6 +28,11 @@ class DataHandler():
     def read_csv(self, id):
         match id:
             case "get_cylinder_values":
+                cylinder_height = 0
+                cylinder_elevation = 0
+                cylinder_xcenter = 0
+                cylinder_ycenter = 0
+                cylinder_diameter = 0
                 with open("global_plan_genneration_request.csv", 'r') as file:
                     headers = ['time','current_pose','current_pos_global','dist_blade_current','dist_blade_target','blade_length','first_blade_rotation','first_blade','inspect_targets','overlap_procentage']
                     csvreader = csv.DictReader(
@@ -43,19 +44,16 @@ class DataHandler():
                         if i > 0:
                             cur_pose = row['current_pose'].replace("'", "\"")
                             cdict_cur_pose = json.loads(cur_pose)
-                            self.cylinder_elevation = cdict_cur_pose['position']['z']
-                                
-                            self.cylinder_xcenter = row['dist_blade_current']
-                            self.cylinder_diameter = row['dist_blade_target']
-                            self.cylinder_height = row['blade_length']
+                            cylinder_elevation = cdict_cur_pose['position']['z']
+                            cylinder_xcenter = row['dist_blade_current']
+                            cylinder_diameter = row['dist_blade_target']
+                            cylinder_height = row['blade_length']
                         
-                    #Look at this tomorrow
-                    self.cylinder_elevation = list(map(float, self.cylinder_elevation))
-                    self.cylinder_xcenter = list(map(float, self.cylinder_xcenter))
-                    self.cylinder_diameter = list(map(float, self.cylinder_diameter))
-                    self.cylinder_height = list(map(float, self.cylinder_height))
+                    cylinder_xcenter = float(cylinder_xcenter)
+                    cylinder_diameter = float(cylinder_diameter)
+                    cylinder_height = float(cylinder_height)
 
-                return self.cylinder_elevation, self.cylinder_xcenter, self.cylinder_diameter, self.cylinder_height
+                return cylinder_elevation, cylinder_xcenter, cylinder_diameter, cylinder_height
             
             case "get_dlp":
                 with open("drone_local_position_unformated.csv", 'r') as file:
@@ -90,7 +88,7 @@ class DataHandler():
                     self.x = list(map(float, self.x))
                     self.y = list(map(float, self.y))
                     self.z = list(map(float, self.z))
-
+                    
                     # ----- Orientation -----
                     self.xroll = list(map(float, self.xroll))
                     self.ypitch = list(map(float, self.ypitch))
@@ -110,9 +108,9 @@ class DataHandler():
 
                         if i > 0:
                             # ----- Times -----
-                            self.time_start.append(row['time'])
+                            self.time_start1.append(row['time'])
 
-                return self.time_start
+                return self.time_start1
         
             case "get_camera":
                 with open("local_position_targets.csv", 'r') as file:
@@ -126,23 +124,23 @@ class DataHandler():
                         if i == 2:
                             continue
                         if i > 2:
-                            layout = row['layout'].replace("'", "\"")
-                            cdict_layout = json.loads(layout)
-                            self.layout.append(cdict_layout['data_offset'])
+                            # layout = row['layout'].replace("'", "\"")
+                            # cdict_layout = json.loads(layout)
+                            # self.layout.append(cdict_layout['data_offset'])
                 
                             cam = row['data'].strip('][').split(', ')
                             data_x.append(cam[0])
                             data_y.append(cam[1])
                             data_z.append(cam[2])
-                            data_w.append(cam[3])
+                            # data_w.append(cam[3])
                             
-                        self.layout = list(map(float, self.layout))
+                        # self.layout = list(map(float, self.layout))
                         data_x = list(map(float, data_x))
                         data_y = list(map(float, data_y))
                         data_z = list(map(float, data_z))
-                        data_w = list(map(float, data_w))
+                        # data_w = list(map(float, data_w))
 
-                return self.layout, data_x, data_y, data_z, data_w
+                return data_x, data_y, data_z
         
             case _:
                 print("ERROR on ID: ", id, " -- No case with given ID")
@@ -195,4 +193,12 @@ class DataHandler():
         yaw_z = list(map(float, yaw_z))     
 
         return roll_x, pitch_y, yaw_z  # in radians
+    
+    def get_maxmin(self, x, y, z):
+        # ----- Min/Max ----- 
+        x_dif = str(round((max(x) - min(x)), 2))
+        y_dif = str(round((max(y) - min(y)), 2))
 
+        index_max_z = z.index(max(z))
+        index_min_z = z.index(min(z))
+        return x_dif, y_dif, index_max_z, index_min_z

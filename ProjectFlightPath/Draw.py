@@ -1,4 +1,3 @@
-from itertools import combinations, product
 from math import atan2, asin
 from locale import normalize
 import matplotlib.pyplot as plt
@@ -7,17 +6,15 @@ import Arrow3D
 import matplotlib.image as mpimg
 
 class Draw:
-    def __init__(self):
+    def __init__(self, widht=12, height=10):
         # Create 3D figure
-        self.fig = plt.figure(figsize=(12, 10))
+        self.fig = plt.figure(figsize=(widht, height))
         self.ax = plt.axes(projection='3d')
 
+
     def draw_cylinder(self, diameter=6, height=20, x_center=4, y_center=0, elevation=15, color='b', resolution=20):
-        radius = 0.5*diameter
         z = np.linspace(
             elevation, elevation + height, resolution)
-
-        # Create a theta value to mesh with
         theta = np.linspace(0, 2*np.pi, resolution)
         theta_grid, z_grid = np.meshgrid(theta, z)
         x_grid = ((0.5*diameter) * np.cos(theta_grid)) + x_center

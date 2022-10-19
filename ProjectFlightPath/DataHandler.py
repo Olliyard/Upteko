@@ -1,9 +1,6 @@
 import csv
 import json
 import math
-from multiprocessing import current_process
-from operator import index
-from unittest.mock import CallableMixin
 
 class DataHandler():
     def __init__(self):

@@ -22,7 +22,7 @@ def main():
     # Draw figures
     drw1.draw_cylinder(diameter=diameter, elevation=elevation, x_center=x_center, height=height)
     drw1.draw_dronepath(xp, yp, zp, offset, with_arrow=0, c='g', step=20)
-    drw1.draw_dronepath(data_x, data_y, data_z, 0, c='c')
+    #drw1.draw_dronepath(data_x, data_y, data_z, 0, c='c')
     drw1.camera_plots(xp, yp, zp, roll_x, pitch_y, yaw_z)
     drw1.insert_image('C:/Users/revil/Desktop/Git_Repos/Upteko/ProjectFlightPath/data/Windmill.jpeg', 'jpeg')
 

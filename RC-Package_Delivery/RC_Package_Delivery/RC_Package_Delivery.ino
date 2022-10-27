@@ -25,10 +25,10 @@ void loop() {
 
   //ADD OR SUBTRACT
   if (digitalRead(switchPos) == HIGH){
-    pulseWidth += 1;
+    pulseWidth += 100;
   }
   else if (digitalRead(switchNeg) == HIGH){
-    pulseWidth -= 1;
+    pulseWidth -= 100;
   }
   else if(digitalRead(neutralPin) == HIGH){
     pulseWidth = 1500;

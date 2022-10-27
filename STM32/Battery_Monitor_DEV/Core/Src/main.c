@@ -35,6 +35,15 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define EPD_RST_Pin GPIO_PIN_15
+#define EPD_RST_GPIO_Port GPIOA
+#define EPD_CS_Pin GPIO_PIN_10
+#define EPD_CS_GPIO_Port GPIOC
+#define EPD_DC_Pin GPIO_PIN_6
+#define EPD_DC_GPIO_Port GPIOC
+#define EPD_BUSY_Pin GPIO_PIN_4
+#define EPD_BUSY_GPIO_Port GPIOB
+#define EPD_BUSY_EXTI_IRQn EXTI4_IRQn
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -162,7 +171,7 @@ int main(void)
 		  //calculate pack total voltage from individual cell voltages
 		  pack_voltage += cell_volt;
 	  }
-	  printf("Total cell voltage: %d\n", pack_voltage);
+	  printf("Total cell voltage: %d\n", (int)pack_voltage);
 
 	  //get the equivalent temperature resistance value
 	  temp = BQ76940_get_HILO_register(TS1_HI_REG, buf_temp);
@@ -386,11 +395,11 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -481,17 +490,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BUSY_UI_Pin */
-  GPIO_InitStruct.Pin = BUSY_UI_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BUSY_UI_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : ALERT_BMS_Pin */
-  GPIO_InitStruct.Pin = ALERT_BMS_Pin;
+  /*Configure GPIO pins : BUSY_UI_Pin ALERT_BMS_Pin */
+  GPIO_InitStruct.Pin = BUSY_UI_Pin|ALERT_BMS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ALERT_BMS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD3_Pin LD2_Pin */
   GPIO_InitStruct.Pin = LD3_Pin|LD2_Pin;
@@ -561,7 +564,7 @@ void BQ76940_get_register(uint8_t reg, uint8_t* buffer)
   */
 uint16_t BQ76940_get_HILO_register(uint8_t reg, uint8_t* buf)
 {
-	uint16_t val, temp_volt, temp_res, temp, current;
+	uint16_t val, temp_volt, temp_res;
 	ret = HAL_I2C_Mem_Read(&hi2c1, BQ76940_ADDR, reg, I2C_MEMADD_SIZE_8BIT, buf, 2, HAL_MAX_DELAY);
 	if(ret != HAL_OK) {
 		printf("ERROR on Reading from HILO register\r\n");
@@ -569,26 +572,26 @@ uint16_t BQ76940_get_HILO_register(uint8_t reg, uint8_t* buf)
 		val = (((int16_t)buf[0] << 8) | buf[1]);
 
 		//Switch case depending on the register to be read. This helps clean up main.
-		switch(reg){
-		case TS1_HI_REG:	//Case Temperature register
+		if(reg == TS1_HI_REG){
 			temp_volt = val*(382*(10*exp(-6)));
 			temp_res = ((10000 * temp_volt) / (3.3 - temp_volt));
 			printf("Returning temp");
 			val = ((-26.38*log(temp_res)) + 91.798);	//see excel sheet "NTC103AT_temp_res_correlation" in Oliver/3-Documentation/3-BMS_docs
-			break;
+		}
 
-		case CC_HI_REG:		//Case Current register
+		else if(reg == CC_HI_REG){
 			if(val > 0x7FF){
 				val |= 0xF000;
 			}
 			printf("Returning current");
 			val = ((val*8.44)/(0.8*(10*exp(-3))));
-			break;
 
-		case 0:				//Case 'other' (Cell voltage register).
-			printf("Returning cell voltage");
-			break;
 		}
+
+		else{
+			printf("Returning cell voltage");
+		}
+
 
 		return val;
 
@@ -629,7 +632,6 @@ void STM32L432KB_LP_STOP2()
 	SystemClock_Config();
 	HAL_ResumeTick();
 }
-
 
 /**
   * @brief  EXTI line detection callback.

@@ -24,11 +24,8 @@ class Draw:
 
 
     def draw_dronepath(self, x, y, z, offset=0, c='b', with_arrow=0, step=10):
-        x_off = x[0:offset]
-        y_off = y[0:offset]
-        z_off = z[0:offset]
-        self.ax.scatter(x_off, y_off, z_off, color='y')
-        self.ax.plot(x_off, y_off, z_off, color='y')
+        self.ax.scatter(x[0:offset], y[0:offset], z[0:offset], color='y')
+        self.ax.plot(x[0:offset], y[0:offset], z[0:offset], color='y')
 
         self.ax.scatter(x[offset:], y[offset:], z[offset:], color=c)
         self.ax.plot(x[offset:], y[offset:], z[offset:], color=c)
@@ -57,13 +54,8 @@ class Draw:
             u = r*np.cos(yaw_z[i])
             w = r*np.sin(yaw_z[i])
 
-            #u = np.sin(np.pi * roll_x[i]) * np.cos(np.pi * pitch_y[i]) * \
-            #    np.cos(np.pi * yaw_z[i])
             v = r*(-np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
                 np.cos(np.pi * yaw_z[i]))
-            #w = (np.sqrt(2.0 / 3.0) * np.cos(np.pi * roll_x[i]) *
-            #     np.cos(np.pi * pitch_y[i]) * np.sin(np.pi * yaw_z[i]))
-            #self.ax.quiver(xp[i], yp[i], zp[i], r*u, r*v, r*w, color='r')
             self.ax.quiver(xp[i], yp[i], zp[i], u, w, v, normalize=True, color='m')
 
 

@@ -1,6 +1,6 @@
-# Project Flight Control
+# **Project Flight Control**
 
-## MoSCoW requirements
+## **MoSCoW requirements**
 The following highlights the priorities for the projects.
 
 **Must** 
@@ -167,6 +167,7 @@ The following provides a short overview of the DataHandler Class and its methods
 - `euler_from_quaternion(self, xq, yq, zq, wq)`: Converts quaternions into Euler angles (roll, pitch and yaw).
 - `get_maxmin(self, x, y, z)`: Gets the maximum and minimum values for x, y and z.
 
+>The following sections will only hightlight the most important methods.
 >For more information about each method as well as their implementations, refer to the [DataHandler source code](https://github.com/Olliyard/Upteko/blob/master/ProjectFlightPath/DataHandler.py)
 
 
@@ -228,8 +229,30 @@ By using this method of parsing the CSV files, we were able to succesfully extra
 **Calculating quaternions to Euler Angles**
 
 ---
+When converting quaternions to Euler Angles it is important to take note of ones values. The following is the formula used for conversion:
 
+> $$
+> q_0 = w \\
+> q_1 = x \\
+> q_2 = y \\
+> q_3 = z \\
+>
+> \left[\begin{matrix}
+>     \phi      \\
+>     \theta    \\
+>     \varphi    
+> \end{matrix}\right]
+> =
+> \left[\begin{matrix}
+>     \arctan(2 \cdot (q_0q_1 + q_2q_3), 1-2 \cdot (q_1^2 + q_2^2))      \\
+>     \arcsin(2 \cdot (q_0q_2-q_3q_1))    \\
+>     \arctan(2 \cdot (q_0q_3 + q_1q_2), 1-2 \cdot (q_2^2 + q_3^2))    
+> \end{matrix}\right]
+> $$
+> [Proof for the equation](https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles) 
 
+Implementation of the above proved to be relatively simple and straightforward. The only thing that proved to be necessary was switching `arctan` and `arcsin` for `atan2` and `asin`.
+The results from the above equations are appended to lists, converted to floats and returned. The new angles will be given in radians.
 
 ### **The Draw Class**
 ---
@@ -243,5 +266,40 @@ The following provides a short overview of the Draw Class and its methods:
 - `annotate(self, x_place, y_place, text)`: Annotates a section of the plot.
 - `annotate_maxmin_z(self, time, x, y, z, index_z_max, index_z_min)`: Annotates the max and min values for `z` with timestamps and coordinates.
 
+>The following sections will only hightlight the most important methods.
 >For more information about each method as well as their implementations, refer to the [Draw source code](https://github.com/Olliyard/Upteko/blob/master/ProjectFlightPath/Draw.py)
 
+**Plotting the drone data and showing direction**
+
+---
+One of the `most` requirements hightlight the need for showing the direction of the drones flight. The way this has been implemented is, that all data up until the beforementioned offset (mission start) will be plotted first. Next, the valuable data is plotted and at last, if the `with_arrow` parameter is set, the data accesses an external `arrow3D` function, which creates an arrow between any two points.
+
+```python
+def draw_dronepath(self, x, y, z, offset=0, c='b', with_arrow=0, step=10):
+    x_off = x[0:offset]
+    y_off = y[0:offset]
+    z_off = z[0:offset]
+    self.ax.scatter(x[0:offset], y[0:offset], z[0:offset], color='y')
+    self.ax.plot(x[0:offset], y[0:offset], z[0:offset], color='y')
+
+    self.ax.scatter(x[offset:], y[offset:], z[offset:], color=c)
+    self.ax.plot(x[offset:], y[offset:], z[offset:], color=c)
+    if (with_arrow == 1):
+        # Create arrows following direction of coords.
+        for i in range(0, len(x)-step, step):
+            self.ax.arrow3D(x[i], y[i], z[i], x[i+step], y[i+step],
+```
+
+**Showing the drones orientation**
+
+---
+```python
+def camera_plots(self, xp, yp, zp, roll_x, pitch_y, yaw_z, r=1):
+    for i in range(0, len(xp), 10):
+        u = r*np.cos(yaw_z[i])
+        w = r*np.sin(yaw_z[i])
+        v = r*(-np.cos(np.pi * roll_x[i]) * np.sin(np.pi * pitch_y[i]) * \
+            np.cos(np.pi * yaw_z[i]))
+
+        self.ax.quiver(xp[i], yp[i], zp[i], u, w, v, normalize=True, color='m')
+```

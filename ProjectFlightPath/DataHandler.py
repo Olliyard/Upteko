@@ -140,12 +140,11 @@ class DataHandler():
                 return data_x, data_y, data_z
         
             case _:
-                print("ERROR on ID: ", id, " -- No case with given ID")
-                exit(1)
+                return f"ERROR on ID: {id}"
 
-    def find_start(self, startime, alltime):
-        for i in range(len(alltime)):
-            if (startime[0][0:19] == alltime[i][0:19]):
+    def find_start(self, start_time, all_time):
+        for i in range(len(all_time)):
+            if (start_time[0][0:19] == all_time[i][0:19]):
                 return i
 
     def offset(self, x, y, z, xr, yp, zy, w, offset, lead_up=10):

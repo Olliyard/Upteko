@@ -6,9 +6,9 @@ import Arrow3D
 import matplotlib.image as mpimg
 
 class Draw:
-    def __init__(self, widht=12, height=10):
+    def __init__(self, width=12, height=10):
         # Create 3D figure
-        self.fig = plt.figure(figsize=(widht, height))
+        self.fig = plt.figure(figsize=(width, height))
         self.ax = plt.axes(projection='3d')
 
 

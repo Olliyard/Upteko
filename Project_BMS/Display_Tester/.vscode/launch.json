@@ -1,0 +1,47 @@
+// AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
+//
+// PIO Unified Debugger
+//
+// Documentation: https://docs.platformio.org/page/plus/debugging.html
+// Configuration: https://docs.platformio.org/page/projectconf/section_env_debug.html
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug",
+            "executable": "c:/Users/revil/Desktop/Git_Repos/Upteko/Project_BMS/Display_Tester/.pio/build/nucleo_l496zg/firmware.elf",
+            "projectEnvName": "nucleo_l496zg",
+            "toolchainBinDir": "C:/Users/revil/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/revil/.platformio/platforms/ststm32/misc/svd/STM32L496.svd",
+            "preLaunchTask": {
+                "type": "PlatformIO",
+                "task": "Pre-Debug"
+            }
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (skip Pre-Debug)",
+            "executable": "c:/Users/revil/Desktop/Git_Repos/Upteko/Project_BMS/Display_Tester/.pio/build/nucleo_l496zg/firmware.elf",
+            "projectEnvName": "nucleo_l496zg",
+            "toolchainBinDir": "C:/Users/revil/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/revil/.platformio/platforms/ststm32/misc/svd/STM32L496.svd"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "c:/Users/revil/Desktop/Git_Repos/Upteko/Project_BMS/Display_Tester/.pio/build/nucleo_l496zg/firmware.elf",
+            "projectEnvName": "nucleo_l496zg",
+            "toolchainBinDir": "C:/Users/revil/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/revil/.platformio/platforms/ststm32/misc/svd/STM32L496.svd",
+            "loadMode": "manual"
+        }
+    ]
+}

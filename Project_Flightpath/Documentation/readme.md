@@ -181,7 +181,7 @@ The following provides a short overview of the DataHandler Class and its methods
 - `get_maxmin(self, x, y, z)`: Gets the maximum and minimum values for x, y and z.
 
 >The following sections will only hightlight the most important methods.
->For more information about each method as well as their implementations, refer to the [DataHandler source code](https://github.com/Olliyard/Upteko/blob/master/ProjectFlightPath/DataHandler.py)
+>For more information about each method as well as their implementations, refer to the [DataHandler source code](https://github.com/Olliyard/Upteko/blob/master/Project_Flightpath/DataHandler.py)
 
 
 **Parsing formatted CSV-files**

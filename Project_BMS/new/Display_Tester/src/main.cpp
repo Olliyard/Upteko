@@ -55,10 +55,10 @@ void setup() {
   Serial.print("draw image...\r\n ");
   epd.DisplayFrame(IMAGE_DATA);
   delay(4000);
-  epd.Clear();
+  //epd.Clear();
 #endif
 
-#if 1
+#if 0
   epd.Init_Partial();
   epd.Clear();
   Serial.print("partial display___ \r\n ");
@@ -79,10 +79,10 @@ void setup() {
   }
 #endif
 
-  epd.Init();
-  Serial.print("clear and sleep......\r\n ");
-  epd.Clear();
-  epd.Sleep();
+  // epd.Init();
+  // Serial.print("clear and sleep......\r\n ");
+  // epd.Clear();
+  // epd.Sleep();
 }
 
 void loop() {

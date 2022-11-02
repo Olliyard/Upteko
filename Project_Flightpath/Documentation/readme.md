@@ -1,5 +1,16 @@
 # **Project Flight Control**
 
+## **Table of contents**
+- [**Project Flight Control**](#project-flight-control)
+  - [**Table of contents**](#table-of-contents)
+  - [**MoSCoW requirements**](#moscow-requirements)
+  - [**Implementation**](#implementation)
+  - [**Version 1**](#version-1)
+    - [**V1 results**](#v1-results)
+  - [**Version 2**](#version-2)
+    - [**The DataHandler Class**](#the-datahandler-class)
+    - [**The Draw Class**](#the-draw-class)
+
 ## **MoSCoW requirements**
 The following highlights the priorities for the projects.
 
@@ -39,6 +50,7 @@ The following highlights the priorities for the projects.
 ```
 
 ## **Implementation**
+
 ---
 The following seeks to document the implementation of the different versions of the software. The table below describes the major implementations of each version.
 
@@ -133,13 +145,14 @@ The `theta_grid` defines the resolution of the sides, the amount of sides to be 
 
 The `x-` and `y-grids` create the centerfolds for the cylinder.
 
-**V1 results**
+### **V1 results**
 
 ---
 The following image showcases the results from the implementation of version 1:
 > ![results v1](v1_results.png)
 
 ## **Version 2**
+
 ---
 For **version 2.0** we wanted to implement more features which takes advantage of the full dataset from the drone’s flight. This includes such things as *pitch, roll and yaw*, as well as *positional values for images* taken during inspection. A few more implementation criterias has also been set by the product owner and are as follows:
 
@@ -157,8 +170,8 @@ The cylinder class, along with some of the matplotlib features, in one class, `D
 Reading CSV files and handling data is collected in another class, `DataHandler`.
 
 ### **The DataHandler Class**
----
 
+---
 The following provides a short overview of the DataHandler Class and its methods:
 
 - `read_csv(self, id)`: Used for parsing csv files 
@@ -255,6 +268,7 @@ Implementation of the above proved to be relatively simple and straightforward. 
 The results from the above equations are appended to lists, converted to floats and returned. The new angles will be given in radians.
 
 ### **The Draw Class**
+
 ---
 The following provides a short overview of the Draw Class and its methods:
 

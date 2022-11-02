@@ -1,0 +1,68 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 296" width="152" height="296">
+	<title>E-Ink_UI</title>
+	<defs>
+		<image  width="152" height="296" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAAEoAQMAAACesaqjAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAABxJREFUeJztwQEBAAAAgiD/r25IQAEAAAAAwJ8BFyAAAcWsb8kAAAAASUVORK5CYII="/>
+		<image  width="62" height="62" id="img2" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAA+CAMAAABEH1h2AAAAAXNSR0IB2cksfwAAAZJQTFRF////////////AAAA/////Pz8+vr69vb29fX1+/v73t7ebGxsQUFBOzs7HR0dAAAACQkJaGho8PDw5OTkJycnPT097u7uioqKKSkpQEBAUFBQYGBggICAVVVVAQEBBAQEpqamNDQ0i4uL+Pj4xMTEy8vL+fn5Ly8vZ2dnHh4euLi4mpqaCwsLCgoKHBwc3d3dDQ0NEhISZmZmkpKSp6enDAwMGBgY/v7+WVlZs7OzhYWFz8/PpKSkTU1NTk5OlJSU/f39UVFRPz8/NTU1t7e38/PzMTEx9PT0XV1dExMTERERAwMD////4ODg0tLSw8PDJiYmjY2N////oKCgtra2vLy8UlJSDg4Ol5eXeXl55eXl////NjY2m5ubFBQUVFRUKCgorKysiIiIoqKiGxsbGhoaLS0tR0dHIiIinZ2dcXFxY2Njra2tWlpaMjIy5ubmzc3NzMzM2dnZgoKCCAgIQkJCGRkZBQUFEBAQLCwsBwcHbm5u9/f3dnZ2Li4uJCQkZGRkc3Nz////////////////FKeFCAAAAIZ0Uk5TMz1mAP///////////////////////////////////////////////////////////////////////////////////////////////9///////7///////////8z//////////////////////////////////////////////////6OZjxTmQgVGAAABc0lEQVR4nO3XV0/CUByG8apVFNE/oiLiQhRRFNxScSMuFAUXIrgFF+699/eW0dPgobUUEqNJn4vmTdPfRc9FkxIEb2npnGUQZCqJXOQi/488MysmSTZ3OSxcmivLYysf4pIXKHBeWBT/GHfFSoyXAKhKw6nLUOVcVVRWaTBeDdoa3mNS1IbT1emhHuMNYGhsMkaSm5pbosvYamijl7y9o5OeXWY1UHG828K8Wg+zevvQ6h9gbg4OCefWb3zYNpIKBxgdS5qPT9gnwYb4lFDumJ5xggvxWaGcJJV60P4lPsfG5xPmLja+IHKMa6hFNywlzT2hi3sZca9wbvetkNx8lY+vScgf+DpaG6zc8u1zEeWbW9v+aAHHDr129/bp5T8ImuilMrvgEONHQB2fnIY6I3mTysCD8XO4uKQ4sjpRV5Gu4UbHcCLCFbeQeHf3DxgnlY9Pz3QBH53shbXXIHPuDE82kYtc5L/L37yxvSfcR/gX+PML8GX5qVIJpIkAAAAASUVORK5CYII="/>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 16px;fill: #000000;font-weight: 400;font-family: "DejaVuSans", "DejaVu Sans" } 
+		.t1 { font-size: 12px;fill: #000000;font-weight: 400;font-family: "DejaVuSans", "DejaVu Sans" } 
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+	<text id="Current:   0.01A" style="transform: matrix(1,0,0,1,7.204,177.899)" >
+		<tspan x="0" y="0" class="t0">C</tspan><tspan  y="0" class="t0">u</tspan><tspan  y="0" class="t0">r</tspan><tspan  y="0" class="t0">r</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">n</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">:</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">.</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">1</tspan><tspan  y="0" class="t0">A</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+	<text id="Refresh rate: 30s" style="transform: matrix(1,0,0,1,7.643,294.944)" >
+		<tspan x="0" y="0" class="t0">R</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">f</tspan><tspan  y="0" class="t0">r</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">s</tspan><tspan  y="0" class="t0">h</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">r</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">:</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">3</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">s
+</tspan>
+	</text>
+	<text id="SoH:   100% SoC:   100%" style="transform: matrix(1,0,0,1,35.411,193.613)" >
+		<tspan x="0" y="0" class="t0">S</tspan><tspan  y="0" class="t0">o</tspan><tspan  y="0" class="t0">H</tspan><tspan  y="0" class="t0">:</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">1</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">%</tspan><tspan  y="0" class="t0">
+</tspan>
+		<tspan x="0" y="19.2" class="t0">S</tspan><tspan  y="19.2" class="t0">o</tspan><tspan  y="19.2" class="t0">C</tspan><tspan  y="19.2" class="t0">:</tspan><tspan  y="19.2" class="t0"> </tspan><tspan  y="19.2" class="t0"> </tspan><tspan  y="19.2" class="t0"> </tspan><tspan  y="19.2" class="t0">1</tspan><tspan  y="19.2" class="t0">0</tspan><tspan  y="19.2" class="t0">0</tspan><tspan  y="19.2" class="t0">%</tspan><tspan  y="19.2" class="t0">
+</tspan>
+	</text>
+	<text id="Battery Stats" style="transform: matrix(1,0,0,1,22.97,141.163)" >
+		<tspan x="0" y="0" class="t0">B</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">r</tspan><tspan  y="0" class="t0">y</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">S</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">s</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+	<text id="Voltage:   53.00V" style="transform: matrix(1,0,0,1,6.892,160.574)" >
+		<tspan x="0" y="0" class="t0">V</tspan><tspan  y="0" class="t0">o</tspan><tspan  y="0" class="t0">l</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">g</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">:</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">5</tspan><tspan  y="0" class="t0">3</tspan><tspan  y="0" class="t0">.</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">0</tspan><tspan  y="0" class="t0">V</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+	<text id="C1: 4.20V C2: 4.20V C3: 4.20V C4" style="transform: matrix(1,0,0,1,2.899,29.798)" >
+		<tspan x="0" y="0" class="t1">C</tspan><tspan  y="0" class="t1">1</tspan><tspan  y="0" class="t1">:</tspan><tspan  y="0" class="t1"> </tspan><tspan  y="0" class="t1">4</tspan><tspan  y="0" class="t1">.</tspan><tspan  y="0" class="t1">2</tspan><tspan  y="0" class="t1">0</tspan><tspan  y="0" class="t1">V</tspan><tspan  y="0" class="t1">
+</tspan>
+		<tspan x="0" y="14.4" class="t1">C</tspan><tspan  y="14.4" class="t1">2</tspan><tspan  y="14.4" class="t1">:</tspan><tspan  y="14.4" class="t1"> </tspan><tspan  y="14.4" class="t1">4</tspan><tspan  y="14.4" class="t1">.</tspan><tspan  y="14.4" class="t1">2</tspan><tspan  y="14.4" class="t1">0</tspan><tspan  y="14.4" class="t1">V</tspan><tspan  y="14.4" class="t1">
+</tspan>
+		<tspan x="0" y="28.8" class="t1">C</tspan><tspan  y="28.8" class="t1">3</tspan><tspan  y="28.8" class="t1">:</tspan><tspan  y="28.8" class="t1"> </tspan><tspan  y="28.8" class="t1">4</tspan><tspan  y="28.8" class="t1">.</tspan><tspan  y="28.8" class="t1">2</tspan><tspan  y="28.8" class="t1">0</tspan><tspan  y="28.8" class="t1">V</tspan><tspan  y="28.8" class="t1">
+</tspan>
+		<tspan x="0" y="43.2" class="t1">C</tspan><tspan  y="43.2" class="t1">4</tspan><tspan  y="43.2" class="t1">: 4.2</tspan><tspan  y="43.2" class="t1">0</tspan><tspan  y="43.2" class="t1">V
+</tspan>
+		<tspan x="0" y="57.6" class="t1">C</tspan><tspan  y="57.6" class="t1">5</tspan><tspan  y="57.6" class="t1">: 4.2</tspan><tspan  y="57.6" class="t1">0</tspan><tspan  y="57.6" class="t1">V
+</tspan>
+		<tspan x="0" y="72" class="t1">C6: 4.2</tspan><tspan  y="72" class="t1">0</tspan><tspan  y="72" class="t1">V</tspan><tspan  y="72" class="t1">
+</tspan>
+	</text>
+	<text id="C7: 4.20V C8: 4.20V C9: 4.20V C1" style="transform: matrix(1,0,0,1,81.931,29.66)" >
+		<tspan x="0" y="0" class="t1">C</tspan><tspan  y="0" class="t1">7</tspan><tspan  y="0" class="t1">: 4.2</tspan><tspan  y="0" class="t1">0</tspan><tspan  y="0" class="t1">V
+</tspan>
+		<tspan x="0" y="14.4" class="t1">C</tspan><tspan  y="14.4" class="t1">8</tspan><tspan  y="14.4" class="t1">: 4.2</tspan><tspan  y="14.4" class="t1">0</tspan><tspan  y="14.4" class="t1">V
+</tspan>
+		<tspan x="0" y="28.8" class="t1">C</tspan><tspan  y="28.8" class="t1">9</tspan><tspan  y="28.8" class="t1">: 4.2</tspan><tspan  y="28.8" class="t1">0</tspan><tspan  y="28.8" class="t1">V
+</tspan>
+		<tspan x="0" y="43.2" class="t1">C</tspan><tspan  y="43.2" class="t1">1</tspan><tspan  y="43.2" class="t1">0</tspan><tspan  y="43.2" class="t1">: 4.2</tspan><tspan  y="43.2" class="t1">0</tspan><tspan  y="43.2" class="t1">V
+</tspan>
+		<tspan x="0" y="57.6" class="t1">C</tspan><tspan  y="57.6" class="t1">1</tspan><tspan  y="57.6" class="t1">1</tspan><tspan  y="57.6" class="t1">: 4.2</tspan><tspan  y="57.6" class="t1">0</tspan><tspan  y="57.6" class="t1">V
+</tspan>
+		<tspan x="0" y="72" class="t1">C</tspan><tspan  y="72" class="t1">1</tspan><tspan  y="72" class="t1">2</tspan><tspan  y="72" class="t1">: 4.2</tspan><tspan  y="72" class="t1">0</tspan><tspan  y="72" class="t1">V
+</tspan>
+	</text>
+	<text id="Cell Voltages" style="transform: matrix(1,0,0,1,22.74,14.045)" >
+		<tspan x="0" y="0" class="t0">C</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">l</tspan><tspan  y="0" class="t0">l</tspan><tspan  y="0" class="t0"> </tspan><tspan  y="0" class="t0">V</tspan><tspan  y="0" class="t0">o</tspan><tspan  y="0" class="t0">l</tspan><tspan  y="0" class="t0">t</tspan><tspan  y="0" class="t0">a</tspan><tspan  y="0" class="t0">g</tspan><tspan  y="0" class="t0">e</tspan><tspan  y="0" class="t0">s</tspan><tspan  y="0" class="t0">
+</tspan>
+	</text>
+	<use id="Layer 1" href="#img2" x="45" y="217"/>
+</svg>

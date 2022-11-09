@@ -29,16 +29,20 @@ void loop() {
     pulseWidth = 1500;
   }
 
-  //Combine the two:
-  //S1
   digitalWrite(PWM_Pin, HIGH);
   delayMicroseconds(pulseWidth);
   digitalWrite(PWM_Pin, LOW);
-  delayMicroseconds(2000);  // low
-  //S2
-  digitalWrite(PWM_Pin, HIGH);
-  delayMicroseconds(2000);  // high
-  digitalWrite(PWM_Pin, LOW);
-  delay(20-(pulseWidth/1000)-4);  //The total sum of all delays [pulsewidth (expressed in miliseconds), 2000us low signal and 2000us S2 high]
+  delay(20-(pulseWidth/1000));  // low
+  //Combine the two:
+  //S1
+  // digitalWrite(PWM_Pin, HIGH);
+  // delayMicroseconds(pulseWidth);
+  // digitalWrite(PWM_Pin, LOW);
+  // delayMicroseconds(2000);  // low
+  // //S2
+  // digitalWrite(PWM_Pin, HIGH);
+  // delayMicroseconds(2000);  // high
+  // digitalWrite(PWM_Pin, LOW);
+  // delay(20-(pulseWidth/1000)-4);  //The total sum of all delays [pulsewidth (expressed in miliseconds), 2000us low signal and 2000us S2 high]
 
 }

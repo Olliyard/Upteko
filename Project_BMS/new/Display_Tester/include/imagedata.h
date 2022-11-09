@@ -23,5 +23,7 @@
  * THE SOFTWARE.
  */
  
-extern const unsigned char IMAGE_DATA[]; //1-Gray 296*152
+extern const unsigned char upteko_frame_1[]; //1-Gray 296*152
+extern const unsigned char upteko_frame_2[]; //1-Gray 296*152
+extern const unsigned char upteko_frame_3[]; //1-Gray 296*152
 /* FILE END */

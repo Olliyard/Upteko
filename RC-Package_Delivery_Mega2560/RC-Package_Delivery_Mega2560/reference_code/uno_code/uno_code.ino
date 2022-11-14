@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include <Servo.h>
-#define PWM_Pin 10
+#define PWM_Pin 11
 #define neutralPin 3
 #define switchPos 5
 #define switchNeg 4

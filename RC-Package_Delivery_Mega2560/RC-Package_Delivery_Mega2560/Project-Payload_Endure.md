@@ -19,12 +19,25 @@ The way bit-banging works, is by repeatedly turning the PWM-pin on and off with 
 >
 >void loop(){
 >   digitalWrite(PWM_Pin, HIGH);
->   delayMicroseconds(lowerLimit);
+>   delayMicroseconds(pulseWidth);
 >   digitalWrite(PWM_Pin, LOW);
->   delayMicroseconds(2000);  
->   digitalWrite(PWM_Pin, HIGH);
->   delayMicroseconds(2000);
->   digitalWrite(PWM_Pin, LOW);
->   delay(20-(lowerLimit/1000)-4);
+>   delay(20-pulseWidth);
 >}
 >```
+
+This produces a PWM-signal with a varying duty cycle between ``1.2ms`` and ``1.8ms``.
+
+## **Connecting the PWM generated signal with the Payload**
+
+---
+
+In order to connect the generated PWM signal with the Payload, we had to create a test-program to be run on the Payload Arduino Nano device. This was needed, as the already implemented code did *not* seem to work as intended, as the servo was not responding to the PWM input, and the DC motor to drive the wrench too was unresponsive.
+We took what we could from the `motor_control_based_on_timers_TEST_091122` [Link](https://github.com/Olliyard/Upteko/blob/master/RC-Package_Delivery_Mega2560/RC-Package_Delivery_Mega2560/reference_code/motor_control_based_on_timers_TEST_091122/motor_control_based_on_timers_TEST_091122.ino)
+
+We ended up simply reading the pulse on the correct pin with the pulseIn function. This function is blocking, but this ended up not being a problem as we're currently only working with, and testing for a singular channel.
+Again, we decided to use the **bit-banging** method to implement the correct PWM to drive the DC-motor. This was done, as the motor pin was not set on any of the pre-existing Nano PWM-pins.
+
+[The following test program was completed](https://github.com/Olliyard/Upteko/blob/master/RC-Package_Delivery_Mega2560/RC-Package_Delivery_Mega2560/src/main.ino). Note, that this program, unlike the beforementioned timer based program, does currently **NOT** change the motors speed once the direction and PWM signal has been generated.
+
+
+Tomorrow -> 16-11-2022 look into encoder values.

@@ -1,6 +1,6 @@
 #include <Arduino.h>
-// #include <SoftPWM.h>
-// #include <SoftPWM_timer.h>
+#include <SoftPWM.h>
+#include <SoftPWM_timer.h>
 
 #include <Servo.h>
 
@@ -11,8 +11,8 @@
 #define CLOSE 10
 #define OPEN 110
 #define HOLD 5
-#define WIND_IN_FAST 40 // 20 is the correct ~32 sec     12.50%
 #define WIND_IN_SLOW 15 // 20 is the correct ~32 sec     12.50%
+#define WIND_IN_FAST 40 // 20 is the correct ~32 sec     12.50%
 // PWM exists between 10->90 have slow in the very start, then fast for the most time, then go slow in the end 66% is approx 5s
 #define RELEASE_SLOW 12 // 12 is the correct     2.50%
 #define RELEASE_MED 30  // 40 is the correct    37.00%
@@ -20,7 +20,6 @@
 
 // Servo Setup
 #define pin_servo 10
-#define pin_interrupt 2
 Servo myservo; // create servo object to control a servo
 
 // Control pin Setup
@@ -45,6 +44,8 @@ Servo myservo; // create servo object to control a servo
 #define pin_dir 11
 #define pin_enable 12
 #define pin_pwm 13
+
+#define pin_interrupt 2
 
 int pwm_target = 66; // 66 is the desired speed with 4m on 7.1 s
 int pwm_test = 14;
@@ -99,8 +100,14 @@ int RC_PWM_stored;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
+  // Initialize
+  SoftPWMBegin();
+
+  // Create and set pin 13 To 0 (off) //& 14 & 15 to 0 (off)
+  SoftPWMSet(pin_pwm, 0);
+  
   pinMode(pin_enable, OUTPUT);
   pinMode(pin_dir, OUTPUT);
   pinMode(pin_pwm, OUTPUT);
@@ -123,7 +130,7 @@ void setup()
   pinMode(pin_in_control_n2, INPUT_PULLUP);
   pinMode(pin_in_control_n3, INPUT_PULLUP);
 
-  pinMode(pin_servo, OUTPUT);
+  //pinMode(pin_servo, OUTPUT);
   myservo.attach(pin_servo);
   attachInterrupt(digitalPinToInterrupt(pin_interrupt), read_me, CHANGE);
 
@@ -134,18 +141,22 @@ void setup()
 
 void loop()
 {
-  read_rc();
-
+  //read_rc();
+  
+//  RC_PWM_stored = pulseIn(pin_interrupt, HIGH);
+//  Serial.println(RC_PWM_stored);
+  
   // Read the nibble from the Pi or switch
   in_control_nibble = read_nibble_control();
   // Read the byte from the encoder
   in_encoder_byte = read_encoder_byte();
-
-  if (RC_PWM_stored > 1700 && RC_PWM_stored < 2000)
-  { // Signal from remote to release, overwrite the signal
+  
+  Serial.println(RC_PWM_stored);
+  if (RC_PWM_stored > 1700 && RC_PWM_stored < 2000) // WIND IN
+  { // Signal from remote to wind in, overwrite the signal
     in_control_nibble = 0b00001101;
   }
-  else if (RC_PWM_stored < 1300 && RC_PWM_stored > 1000)
+  else if (RC_PWM_stored < 1300 && RC_PWM_stored > 1000) // RELEASE
   { // Signal from remote to release, overwrite the signal
     in_control_nibble = 0b00001100;
   }
@@ -220,9 +231,21 @@ void loop()
     break;
   }
 
+  //Serial.print("pin_encoder_out_dir: ");
+  //Serial.println(dir);
+  //Serial.print("pin_pwm: ");
+  //Serial.println(pwm);
+  //Serial.print("pin_dir: ");
+  //Serial.println(dir);
+  //Serial.print("servo_pos: ");
+  //Serial.println(servo_pos);
+  //Serial.print("pin_enable: ");
+  //Serial.println(enable);
+  // Serial.println();
+  
   digitalWrite(pin_encoder_out_dir, dir); // change dir in encoder to match
-  writePWM(pin_pwm, pwm);                 // write pwm to motor
-  // SoftPWMSetPercent(pin_pwm, pwm);
+  //writePWM(pin_pwm, pwm);                 // write pwm to motor
+  SoftPWMSetPercent(pin_pwm, pwm);
   digitalWrite(pin_dir, dir);
   myservo.write(servo_pos);
   digitalWrite(pin_enable, enable);
@@ -319,7 +342,8 @@ int read_nibble_control()
 
 void reset()
 {
-  // Serial.println("Resetting");
+  Serial.print("Resetting, encoder is set to: ");
+  Serial.println(in_encoder_byte);
   servo_pos = CLOSE;
   enable = DISABLE;
   dir = CW;
@@ -337,8 +361,10 @@ void read_me()
     RC_PWM_stored = RC_PWM;
   }
   RC_high_time = micros();
-} // copy store all values from temporary array another array after 15 reading
+//  RC_PWM_stored = pulseIn(pin_interrupt, HIGH);
+//  Serial.println(RC_PWM_stored);
 
+} 
 void read_rc()
 {
   int i, j, k = 0;

@@ -1,6 +1,8 @@
 #ifndef _BQ76940
 #define _BQ76940
 
+#include <Arduino.h>
+
 // Register addresses
 #define SYS_STAT 0x00
 #define CELLBAL1 0x01
@@ -98,7 +100,6 @@ int8_t offsetRead(void);
 uint16_t gainRead(void);
 uint16_t PackVoltageRead(void);
 uint16_t CellVoltageRead(uint8_t cellregister);
-uint8_t CellArrayVoltageRead(uint16_t cellV[]);
 uint8_t tripCalculator(uint32_t thershold);
 uint8_t OVtripWrite(void);
 uint8_t UVtripWrite(void);

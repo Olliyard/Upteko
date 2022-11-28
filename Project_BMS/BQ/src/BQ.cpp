@@ -1,5 +1,6 @@
-#include "BQ76940.h"
-#include "i2c.h"
+#include "BQ.h"
+#include "I2C.h"
+#include "GLOBALS.h"
 
 /// @brief Initialize the BQ76940
 /// @param  none

@@ -3,9 +3,8 @@
 
 #include <Arduino.h>
 
-#define BQI2CADR	0x08
-// 1 ist in bq76940_Balancing für das Ausführen der Schleife reserviert
-#define ERROR_START	2
+#define BQI2CADR	    0x08
+#define ERROR_START	    2
 #define ERROR_MT_SLA	3
 #define ERROR_MR_SLA	4
 #define ERROR_MT_DATA	5

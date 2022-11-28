@@ -1,6 +1,7 @@
 #ifndef _GLOBALS
 #define _GLOBALS
 
+#include <Arduino.h>
 #include <avr/io.h>
 #include <util/twi.h>
 #include <util/delay.h>

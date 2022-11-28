@@ -11,7 +11,7 @@ asm(".global _printf_float");
 #define COLORED 0
 #define UNCOLORED 1
 #define MAX_CELLS 12
-#define BOOT 0
+#define BOOT 1
 
 void UI_Init();
 void UI_boot();
@@ -71,7 +71,10 @@ void loop()
   epd.DisplayFrame(paint.GetImage());
   // delay(500);
 
-  SoC--;
+  if(SoC >= 0)
+    SoC--;
+  else 
+    SoC = 100;
 }
 
 // Initializes the UI

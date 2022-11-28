@@ -1,7 +1,7 @@
 #ifndef _I2C
 #define _I2C
 
-#include "i2c.h"
+#include "I2C.h"
 
 #define F_CPU 8000000UL
 #include <util/delay.h>

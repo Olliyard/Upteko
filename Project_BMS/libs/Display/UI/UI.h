@@ -1,0 +1,6 @@
+#include "epd2in66.h"
+#include "imagedata.h"
+#include "epdif.h"
+#include "epdpaint.h"
+#include "fonts.h"
+#include "imagedata.h"

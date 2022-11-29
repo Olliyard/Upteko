@@ -4,6 +4,7 @@
 #define SERVO_OPEN 110
 #define SERVO_CLOSE 10
 
+// Functions
 void __servo_open();
 void __servo_close();
 

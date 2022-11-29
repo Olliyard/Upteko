@@ -30,6 +30,7 @@
 #define CONTROL_N2 5
 #define CONTROL_N3 6
 
+// Functions
 void __motor_stop();
 void __motor_hold();
 void __motor_wind_in();

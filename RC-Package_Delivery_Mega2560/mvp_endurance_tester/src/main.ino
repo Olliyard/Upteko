@@ -30,19 +30,32 @@ void loop()
   if (DEBUG)
     debug_loop();
 
+  // Read sensors
+  uint8_t result = main_read();
+
+  // Activate motors according to nibble
+  main_react(result);
+}
+
+uint8_t main_read()
+{
   // Read encoder
   uint8_t encoder_value = read_encoder();
 
-  // Read nibble
-  uint8_t nibble_value = read_nibble();
-
   // Read rc
   uint8_t rc_value = rc_read();
-  
-  // Change nibble, if rc present
-  if (rc_read() != 0)
-    nibble_value = rc_value;
 
+  // Use rc-signal
+  if (rc_read() != 0)
+    return rc_value;
+
+  else
+    // Rc-signal not present
+    return read_nibble();
+}
+
+void main_react(uint8_t nibble_value)
+{
   // Stop motor
   if (nibble_value == 0b00001111)
   {

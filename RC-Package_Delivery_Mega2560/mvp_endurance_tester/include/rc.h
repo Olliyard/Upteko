@@ -1,8 +1,6 @@
-#include "Arduino.h"
-
 #define RC_PIN 2
-#define WIND_IN 0   
-#define WIND_OUT 1
+#define WIND_IN 1   
+#define WIND_OUT 2
 
 void rc_setup()
 {
@@ -22,4 +20,8 @@ uint8_t rc_read()
     // Wind out range
     else if (result > 1000 && result < 1300)
         return WIND_OUT;
+
+    // No signal
+    else
+        return 0;
 }

@@ -1,6 +1,13 @@
 #include <SoftPWM.h>
 #include <SoftPWM_timer.h>
 
+// MOTOR STATES
+#define MOTOR_STOP 0
+#define MOTOR_HOLD 1
+#define MOTOR_WIND_IN 2
+#define MOTOR_WIND_OUT 3
+
+// MOTOR PINS
 #define ENABLE_PIN 12
 #define DIR_PIN 11
 #define PWM_PIN 13
@@ -22,6 +29,12 @@
 #define CONTROL_N1 4
 #define CONTROL_N2 5
 #define CONTROL_N3 6
+
+void __motor_stop();
+void __motor_hold();
+void __motor_wind_in();
+void __motor_wind_out();
+
 
 void motor_setup()
 {
@@ -106,10 +119,73 @@ uint8_t read_nibble()
     return result;
 }
 
-void motor_control(uint8_t status)
+void motor_control(uint8_t state)
 {
-    if (status == 0)
+    if (state == MOTOR_STOP)
     {
-        
+        __motor_stop();
     }
+
+    else if (state == MOTOR_HOLD)
+    {
+        __motor_hold();
+    }
+
+    else if (state == MOTOR_WIND_IN)
+    {
+        __motor_wind_in();
+    }
+
+    else if (state == MOTOR_WIND_OUT)
+    {
+        __motor_wind_out();
+    }
+}
+
+void __motor_stop()
+{
+    // Set enable pin
+    digitalWrite(ENABLE_PIN, LOW);
+
+    // Set direction pin
+    digitalWrite(DIR_PIN, LOW);
+
+    // Set pwm pin
+    SoftPWMSet(PWM_PIN, 0);
+}
+
+void __motor_hold()
+{
+    // Set enable pin
+    digitalWrite(ENABLE_PIN, HIGH);
+
+    // Set direction pin
+    digitalWrite(DIR_PIN, LOW);
+
+    // Set pwm pin
+    SoftPWMSet(PWM_PIN, 5);
+}
+
+void __motor_wind_in()
+{
+    // Set enable pin
+    digitalWrite(ENABLE_PIN, HIGH);
+
+    // Set direction pin
+    digitalWrite(DIR_PIN, LOW);
+
+    // Set pwm pin
+    SoftPWMSet(PWM_PIN, 255);
+}
+
+void __motor_wind_out()
+{
+    // Set enable pin
+    digitalWrite(ENABLE_PIN, HIGH);
+
+    // Set direction pin
+    digitalWrite(DIR_PIN, HIGH);
+
+    // Set pwm pin
+    SoftPWMSet(PWM_PIN, 255);
 }

@@ -32,16 +32,42 @@ void loop()
 
   // Read encoder
   uint8_t encoder_value = read_encoder();
-  
+
   // Read nibble
   uint8_t nibble_value = read_nibble();
 
   // Read rc
   uint8_t rc_value = rc_read();
+  
+  // Change nibble, if rc present
+  if (rc_read() != 0)
+    nibble_value = rc_value;
 
-  // Command motor
-  if (rc_value == WIND_IN)
-    motor_wind_in();
-  else if (rc_value == WIND_OUT)
-    motor_wind_out();
+  // Stop motor
+  if (nibble_value == 0b00001111)
+  {
+    servo_control(SERVO_CLOSE);
+    motor_control(MOTOR_STOP);
+  }
+
+  // Hold motor
+  else if (nibble_value == 0b00001110)
+  {
+    servo_control(SERVO_CLOSE);
+    motor_control(MOTOR_HOLD);
+  }
+
+  // Wind in
+  else if (nibble_value == 0b00001101)
+  {
+    servo_control(SERVO_CLOSE);
+    motor_control(MOTOR_WIND_IN);
+  }
+
+  // Wind out
+  else if (nibble_value == 0b00001100)
+  {
+    servo_control(SERVO_OPEN);
+    motor_control(WIND_OUT);
+  }
 }

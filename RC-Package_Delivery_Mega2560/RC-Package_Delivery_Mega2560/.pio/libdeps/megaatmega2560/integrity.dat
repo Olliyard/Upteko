@@ -1,2 +1,0 @@
-if (board == nanoatmega328)
-arduino-libraries/Servo@^1.1.8

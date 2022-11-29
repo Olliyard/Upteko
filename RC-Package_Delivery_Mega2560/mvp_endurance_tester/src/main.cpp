@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "motor.h"
 #include "servo.h"
+#include "rc.h"
 
 // CONFIGURATION
 #define DEBUG 0
@@ -28,4 +29,19 @@ void loop()
   // Check debug
   if (DEBUG)
     debug_loop();
+
+  // Read encoder
+  uint8_t encoder_value = read_encoder();
+  
+  // Read nibble
+  uint8_t nibble_value = read_nibble();
+
+  // Read rc
+  uint8_t rc_value = rc_read();
+
+  // Command motor
+  if (rc_value == WIND_IN)
+    motor_wind_in();
+  else if (rc_value == WIND_OUT)
+    motor_wind_out();
 }

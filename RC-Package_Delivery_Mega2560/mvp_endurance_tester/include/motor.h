@@ -53,7 +53,7 @@ void motor_setup()
     pinMode(CONTROL_N3, INPUT_PULLUP);
 }
 
-int motor_read()
+uint8_t read_encoder()
 {
     uint8_t result = 0;
 
@@ -81,7 +81,35 @@ int motor_read()
     // Check polarity
     if (b_p == 1)
         result = -result;
-    
+
     // Return result
     return result;
+}
+
+uint8_t read_nibble()
+{
+    uint8_t result = 0;
+
+    // Read controller
+    uint8_t n0 = digitalRead(CONTROL_N0);
+    uint8_t n1 = digitalRead(CONTROL_N1);
+    uint8_t n2 = digitalRead(CONTROL_N2);
+    uint8_t n3 = digitalRead(CONTROL_N3);
+
+    // Write bits
+    bitWrite(result, 0, n0);
+    bitWrite(result, 1, n1);
+    bitWrite(result, 2, n2);
+    bitWrite(result, 3, n3);
+
+    // Return result
+    return result;
+}
+
+void motor_control(uint8_t status)
+{
+    if (status == 0)
+    {
+        
+    }
 }

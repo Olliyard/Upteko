@@ -28,6 +28,8 @@
 #ifndef EPDIF_H
 #define EPDIF_H
 
+#include <Arduino.h>
+
 // Pin definition
 #define CS_PIN          D10
 #define BUSY_PIN        D7

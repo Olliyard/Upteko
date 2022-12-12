@@ -1,4 +1,5 @@
-#include "Arduino.h"
+
+#include <Arduino.h>
 #define readA bitRead(PIND,2)//faster than digitalRead()
 
 const byte encoderPinA = 2;//outputA digital pin2

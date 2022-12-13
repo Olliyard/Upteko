@@ -3,7 +3,7 @@
 void I2C_init()
 {
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(100000);
   Wire.beginTransmission(I2C_ADDR);
   Wire.endTransmission();
 }

@@ -1,3 +1,5 @@
+#include <SoftPWM.h>
+
 // Pinout:
 #define D1 8
 #define D2 9
@@ -9,46 +11,51 @@
 
 // Functions
 void hbridge_setup();
-void hbridge_control(uint8_t state);
+void hbridge_control(uint8_t state, uint8_t speed);
 void __hbridge_off();
-void __hbridge_forward();
-void __hbridge_backward();
+void __hbridge_forward(uint8_t speed);
+void __hbridge_backward(uint8_t speed);
 
 // Setup H-bridge
 void hbridge_setup()
 {
-    pinMode(D1, OUTPUT);
-    pinMode(D2, OUTPUT);
+    SoftPWMSet(D1, 0);
+    SoftPWMSet(D2, 0);
+    SoftPWMBegin();
+    SoftPWMSetFadeTime(D1, 0, 100);
+    //SoftPWMSetFadeTime(D2, 0, 1000)
 }
 
 // Control H-bridge
-void hbridge_control(uint8_t state)
+void hbridge_control(uint8_t state, uint8_t speed)
 {
     if (state == HBRIDGE_OFF)
         __hbridge_off();
+
     else if (state == HBRIDGE_FORWARD)
-        __hbridge_forward();
+        __hbridge_forward(speed);
+
     else if (state == HBRIDGE_BACKWARD)
-        __hbridge_backward();
+        __hbridge_backward(speed);
 }
 
 // Turn off H-bridge
 void __hbridge_off()
 {
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
+    SoftPWMSet(D1, 0);
+    SoftPWMSet(D2, 0);
 }
 
 // Turn on H-bridge forward
-void __hbridge_forward()
+void __hbridge_forward(uint8_t speed)
 {
-    digitalWrite(D1, HIGH);
-    digitalWrite(D2, LOW);
+    SoftPWMSetPercent(D1, speed);
+    SoftPWMSetPercent(D2, 0);
 }
 
 // Turn on H-bridge backward
-void __hbridge_backward()
+void __hbridge_backward(uint8_t speed)
 {
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, HIGH);
+    SoftPWMSetPercent(D1, 0);
+    SoftPWMSetPercent(D2, speed);
 }

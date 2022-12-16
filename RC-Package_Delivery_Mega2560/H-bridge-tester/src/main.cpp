@@ -18,22 +18,17 @@ void setup()
 
 void loop()
 {
+  uint8_t speed = 100;
   // put your main code here, to run repeatedly:
-  if (DEBUG)
-  {
-    Serial.begin(9600);
-    Serial.println("DEBUG MODE");
-    servo_test();
-    exit(1);
-  }
+  hbridge_control(HBRIDGE_FORWARD, speed);
+  delay(3000);
 
-  // Check switches. Turn on H-bridge accordingly
-  if (read_switches() == SWITCH_POS)
-    hbridge_control(HBRIDGE_FORWARD);
+  hbridge_control(HBRIDGE_OFF, 0);
+  delay(3000);
 
-  else if (read_switches() == SWITCH_NEG)
-    hbridge_control(HBRIDGE_BACKWARD);
+  hbridge_control(HBRIDGE_BACKWARD, speed);
+  delay(3000);
 
-  else
-    hbridge_control(HBRIDGE_OFF);
+  hbridge_control(HBRIDGE_OFF, 0);
+  delay(3000);
 }

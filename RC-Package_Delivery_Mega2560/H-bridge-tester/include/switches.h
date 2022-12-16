@@ -4,13 +4,15 @@
 #define switchNeg 4
 
 // Define return values for the switches
-#define SWITCH_NEUTRAL 0
-#define SWITCH_POS 1
-#define SWITCH_NEG 2
+#define SWITCH_NEUTRAL 1
+#define SWITCH_POS 2
+#define SWITCH_NEG 3
+
+uint8_t pressed_switch = 0;
 
 // Functions
 void switches_setup();
-uint8_t read_switches();
+void read_switches();
 
 // Setup the switches
 void switches_setup()
@@ -21,14 +23,14 @@ void switches_setup()
 }
 
 // Read the switches and return the state
-uint8_t read_switches()
+void read_switches()
 {
     if (digitalRead(switchPos) == HIGH)
-        return SWITCH_POS;
+        pressed_switch = SWITCH_POS;
+
     else if (digitalRead(switchNeg) == HIGH)
-        return SWITCH_NEG;
+        pressed_switch = SWITCH_NEG;
+
     else if (digitalRead(neutralPin) == HIGH)
-        return SWITCH_NEUTRAL;
-    else
-        return SWITCH_NEUTRAL;
+        pressed_switch = SWITCH_NEUTRAL;
 }

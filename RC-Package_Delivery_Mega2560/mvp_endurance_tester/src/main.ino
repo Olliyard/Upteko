@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "debug.h"
 #include "motor.h"
-#include "servo.h"
+#include "servo1.h"
 #include "rc.h"
 
 // CONFIGURATION

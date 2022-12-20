@@ -15,14 +15,6 @@ void servo_setup()
     servo.attach(10);
 }
 
-void servo_control(uint8_t state)
-{
-    if (state == SERVO_OPEN)
-        __servo_open();
-    else if (state == SERVO_CLOSE)
-        __servo_close();
-}
-
 // Open servo
 void __servo_open()
 {
@@ -34,3 +26,12 @@ void __servo_close()
 {
     servo.write(10);
 }
+
+void servo_control(uint8_t state)
+{
+    if (state == SERVO_OPEN)
+        __servo_open();
+    else if (state == SERVO_CLOSE)
+        __servo_close();
+}
+

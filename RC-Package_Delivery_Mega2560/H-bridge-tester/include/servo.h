@@ -40,11 +40,11 @@ void servo_test()
 // Open servo
 void __servo_open()
 {
-    servo.write(110);
+    servo.write(SERVO_OPEN);
 }
 
 // Close servo
 void __servo_close()
 {
-    servo.write(10);
+    servo.write(SERVO_CLOSE);
 }

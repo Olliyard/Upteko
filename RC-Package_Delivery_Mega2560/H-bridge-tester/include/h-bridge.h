@@ -19,11 +19,9 @@ void __hbridge_backward(uint8_t speed);
 // Setup H-bridge
 void hbridge_setup()
 {
+    SoftPWMBegin();
     SoftPWMSet(D1, 0);
     SoftPWMSet(D2, 0);
-    SoftPWMBegin();
-    SoftPWMSetFadeTime(D1, 0, 100);
-    //SoftPWMSetFadeTime(D2, 0, 1000)
 }
 
 // Control H-bridge
